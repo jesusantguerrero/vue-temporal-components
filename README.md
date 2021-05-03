@@ -1,4 +1,6 @@
-# insane-gant-vue
+# Vue Temporal Components
+
+- Timeline view
 
 ## Project setup
 ```

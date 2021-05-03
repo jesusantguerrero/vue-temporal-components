@@ -33,7 +33,7 @@ export default {
 
 <style lang="scss" scoped>
 .marker-point {
-  width: 108%;
+  width: 118%;
   z-index: 100;
 }
 </style>

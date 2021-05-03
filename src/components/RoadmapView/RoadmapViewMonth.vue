@@ -70,6 +70,7 @@ export default {
   name: "RoadmapViewMonth",
   props: {
     tasks: Array,
+    year: Date,
     focusedTextClass: {
       type: String,
       default: "text-blue-500",

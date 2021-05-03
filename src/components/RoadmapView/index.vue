@@ -116,11 +116,13 @@ export default {
   setup() {
     const scrollToToday = (smooth) => {
       const day = document.querySelector(".marker-day");
-      day.scrollIntoView(
-        smooth
-          ? { behavior: "smooth", block: "center", inline: "center" }
-          : { inline: "center" }
-      );
+      if (day && day.scrollIntoView) {
+        day.scrollIntoView(
+          smooth
+            ? { behavior: "smooth", block: "center", inline: "center" }
+            : { inline: "center" }
+        );
+      }
     };
 
     onMounted(() => {
