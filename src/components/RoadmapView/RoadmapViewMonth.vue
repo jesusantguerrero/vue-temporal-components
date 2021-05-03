@@ -19,9 +19,12 @@
           'marker-day font-bold': isCurrentDay(day),
         }"
       >
-        <span class="inline-block h-6 text-gray-400 text-xs w-full" :class="{
-          'fix-day-height': isCurrentDay(day),
-        }" >
+        <span
+          class="inline-block h-6 text-gray-400 text-xs w-full"
+          :class="{
+            'fix-day-height': isCurrentDay(day),
+          }"
+        >
           {{ isCurrentDay(day) ? "T" : "" }}
         </span>
         <!-- Task Cells -->

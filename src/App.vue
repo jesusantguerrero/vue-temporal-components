@@ -1,6 +1,6 @@
 <template>
-  <roadmap-view 
-    :tasks="tasks" 
+  <roadmap-view
+    :tasks="tasks"
     focused-text-class="text-green-500"
     marker-bg-class="bg-green-400"
   />
@@ -8,13 +8,13 @@
 
 <script>
 import { reactive, toRefs } from "vue";
-import RoadmapView from "./components/RoadmapView";
-import addDays from 'date-fns/addDays';
+import { RoadmapView } from "./components";
+import addDays from "date-fns/addDays";
 
 export default {
   name: "App",
   components: {
-    RoadmapView
+    RoadmapView,
   },
   setup() {
     const state = reactive({
@@ -23,13 +23,13 @@ export default {
           id: 1,
           title: "Description",
           start: new Date(),
-          end: addDays(new Date(), 2)
+          end: addDays(new Date(), 2),
         },
         {
           id: 2,
           title: "Description II",
           start: new Date(),
-          end: addDays(new Date(), 4)
+          end: addDays(new Date(), 4),
         },
       ],
     });

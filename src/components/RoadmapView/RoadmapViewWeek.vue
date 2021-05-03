@@ -50,14 +50,20 @@
 </template>
 
 <script>
-import { startOfYear, endOfYear, isBefore, isAfter, addDays } from "date-fns";
-import format from "date-fns/format";
-import eachDayOfInterval from "date-fns/eachDayOfInterval";
-import isSameDay from "date-fns/fp/isSameDay";
+import {
+  format,
+  startOfYear,
+  endOfYear,
+  isBefore,
+  isAfter,
+  addDays,
+  isSameDay,
+  isSameWeek,
+  eachDayOfInterval,
+  eachWeekOfInterval,
+} from "date-fns";
 import { nextTick, onMounted, ref } from "vue";
 import MarkerPoint from "./MarkerPoint.vue";
-import eachWeekOfInterval from "date-fns/esm/fp/eachWeekOfInterval/index";
-import isSameWeek from "date-fns/esm/isSameWeek/index";
 
 export default {
   name: "RoadmapViewWeek",
