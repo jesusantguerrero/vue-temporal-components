@@ -5,6 +5,7 @@
 <script>
 import { reactive, toRefs } from "vue";
 import GantVue from "./components/GantVue";
+import addDays from 'date-fns/addDays';
 
 export default {
   name: "App",
@@ -17,10 +18,14 @@ export default {
         {
           id: 1,
           title: "Description",
+          start: new Date(),
+          end: addDays(new Date(), 2)
         },
         {
           id: 2,
           title: "Description II",
+          start: new Date(),
+          end: addDays(new Date(), 4)
         },
       ],
     });

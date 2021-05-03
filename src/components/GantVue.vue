@@ -37,7 +37,7 @@
       </div>
       <div class="months flex w-full overflow-x-auto" ref="gantDate">
         <div
-          class="task-col__header border-r text-left"
+          class="task-col__header border-r text-left relative"
           v-for="month in months"
           :key="month"
         >
@@ -53,7 +53,9 @@
               :key="day"
               class="w-10 text-center"
               :class="{
-                'text-blue-400 marker-day bg-gray-100 font-bold': isCurrentDay(day),
+                'text-blue-400 marker-day bg-gray-100 font-bold': isCurrentDay(
+                  day
+                ),
               }"
             >
               <span
@@ -65,11 +67,14 @@
                 {{ format(day, "dd") }}
               </span>
               <div class="units-body">
-                <div
-                  v-for="task in tasks"
-                  :key="task.id"
-                  class="border h-10"
-                ></div>
+                <div v-for="task in tasks" :key="task.id" class="border h-10 w-full relative">
+                  <span
+                    class="task-marker inline-block w-full h-4 bg-red-400 mt-2 cursor-pointer absolute left-0"
+                    :class="{'rounded-l-lg task-marker__side': isSameDay(task.start, day), 'rounded-r-lg task-marker__side': isSameDay(task.end, day)}"
+                    :title="`${task.title} ${format(task.start, 'dd') }`"
+                    v-if="isHourBetween(task.start, task.end, day)"
+                  ></span>
+                </div>
               </div>
             </div>
           </div>
@@ -86,6 +91,8 @@ import {
   endOfYear,
   startOfMonth,
   isSameMonth,
+  isBefore,
+  isAfter,
 } from "date-fns";
 import format from "date-fns/format";
 import eachDayOfInterval from "date-fns/eachDayOfInterval";
@@ -113,6 +120,10 @@ export default {
       return isSameDay(day, new Date());
     };
 
+    const isHourBetween = (start, end, date) => {
+      return (isAfter(date, start) && isBefore(date, end)) || isSameDay(date, start) || isSameDay(end, date) 
+    };
+
     const scrollToToday = (smooth) => {
       const day = document.querySelector(".marker-day");
       day.scrollIntoView(
@@ -136,6 +147,8 @@ export default {
       }),
       isCurrentMonth,
       isCurrentDay,
+      isHourBetween,
+      isSameDay,
       format: format,
       gantDate,
       getDaysForMonth,
@@ -145,4 +158,9 @@ export default {
 };
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.task-marker {
+  width: 105%;
+  z-index: 100;
+}
+</style>
