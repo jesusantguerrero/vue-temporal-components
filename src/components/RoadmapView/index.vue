@@ -1,7 +1,11 @@
 <template>
   <div class="gant-vue">
-    <div class="search-bar border w-full text-left py-2 space-x-5 text-sm">
+    <div
+      class="search-bar w-full text-left py-2 space-x-5 text-sm"
+      v-if="showToolbar"
+    >
       <input
+        v-if="showSearch"
         type="search"
         class="px-4 w-4/12 focus:outline-none border-r-2"
         placeholder="Search by task name or custom field value"
@@ -12,11 +16,19 @@
       >
         Today
       </button>
-      <button class="hover:bg-gray-100 px-2 py-1 rounded-md focus:outline-none">
-        +
-      </button>
-      <button class="hover:bg-gray-100 px-2 py-1 rounded-md focus:outline-none">
+      <button
+        class="hover:bg-gray-100 px-2 py-1 rounded-md focus:outline-none"
+        @click="zoomOut"
+        :disabled="!canZoomOut"
+      >
         -
+      </button>
+      <button
+        class="hover:bg-gray-100 px-2 py-1 rounded-md focus:outline-none"
+        @click="zoomIn"
+        :disabled="!canZoomIn"
+      >
+        +
       </button>
       <select
         class="hover:bg-gray-100 px-2 py-1 rounded-md focus:outline-none"
@@ -28,14 +40,24 @@
       </select>
     </div>
     <div class="custom-table flex w-full overflow-hidden border-t">
-      <div class="task-column w-52 border-r">
-        <div class="task-col__header h-14 bg-gray-200">Task Title</div>
+      <div class="task-column border-r min-w-min">
         <div
-          class="task-col__cell h-10 border-b-2"
+          class="task-col__header h-14 bg-gray-100 text-gray-500 font-bold flex items-center justify-center"
+        >
+          Task Title
+        </div>
+        <div
+          class="task-col__cell h-10 border-b-2 cursor-pointer"
           v-for="task in tasks"
           :key="task.id"
+          @click="$emit('task-clicked', task)"
         >
-          {{ task.title }}
+          <div class="mx-2 text-left">
+            {{ task.title }}
+            <span class="text-sm font-bold" :class="focusedTextClass">
+              {{ differenceInCalendarDays(task.end, task.start) }} days
+            </span>
+          </div>
         </div>
       </div>
       <div
@@ -55,11 +77,11 @@
 </template>
 
 <script>
-import { startOfMonth, isSameMonth, isBefore, isAfter } from "date-fns";
-import format from "date-fns/format";
-import eachDayOfInterval from "date-fns/eachDayOfInterval";
-import endOfMonth from "date-fns/endOfMonth";
-import isSameDay from "date-fns/fp/isSameDay";
+import {
+  format,
+  differenceInCalendarDays,
+  differenceInBusinessDays,
+} from "date-fns";
 import { computed, nextTick, onMounted, reactive, toRefs } from "vue";
 import RoadmapViewWeek from "./RoadmapViewWeek.vue";
 import RoadmapViewDays from "./RoadmapViewDays.vue";
@@ -73,6 +95,14 @@ export default {
       type: String,
       default: "text-blue-500",
     },
+    showToolbar: {
+      type: Boolean,
+      default: false,
+    },
+    showSearch: {
+      type: Boolean,
+      default: false,
+    },
     markerBgClass: {
       type: String,
       default: "bg-red-500",
@@ -84,34 +114,11 @@ export default {
     RoadmapViewMonth,
   },
   setup() {
-    const getDaysForMonth = (month) => {
-      return eachDayOfInterval({
-        start: startOfMonth(month),
-        end: endOfMonth(month),
-      });
-    };
-
-    const isCurrentMonth = (month) => {
-      return isSameMonth(month, new Date());
-    };
-
-    const isCurrentDay = (day) => {
-      return isSameDay(day, new Date());
-    };
-
-    const isHourBetween = (start, end, date) => {
-      return (
-        (isAfter(date, start) && isBefore(date, end)) ||
-        isSameDay(date, start) ||
-        isSameDay(end, date)
-      );
-    };
-
     const scrollToToday = (smooth) => {
       const day = document.querySelector(".marker-day");
       day.scrollIntoView(
         smooth
-          ? { behavior: "smooth", block: "center", inline: "start" }
+          ? { behavior: "smooth", block: "center", inline: "center" }
           : { inline: "center" }
       );
     };
@@ -125,25 +132,49 @@ export default {
     const state = reactive({
       year: new Date(),
       viewType: "d",
+      viewTypes: {
+        d: "days",
+        w: "week",
+        m: "month",
+      },
+      modes: computed(() => {
+        return Object.keys(state.viewTypes);
+      }),
+      currentMode: computed(() => {
+        return state.modes.findIndex((mode) => mode == state.viewType);
+      }),
+      canZoomIn: computed(() => {
+        return state.currentMode !== 0;
+      }),
+      canZoomOut: computed(() => {
+        return state.currentMode !== state.modes.length - 1;
+      }),
+
       componentName: computed(() => {
-        const components = {
-          d: "days",
-          w: "week",
-          m: "month",
-        };
-        return `roadmap-view-${components[state.viewType]}`;
+        return `roadmap-view-${state.viewTypes[state.viewType]}`;
       }),
     });
 
+    const zoomIn = () => {
+      if (state.canZoomIn) {
+        state.viewType = state.modes[state.currentMode - 1];
+      }
+    };
+
+    const zoomOut = () => {
+      if (state.canZoomOut) {
+        state.viewType = state.modes[state.currentMode + 1];
+      }
+    };
+
     return {
       ...toRefs(state),
-      isCurrentMonth,
-      isCurrentDay,
-      isHourBetween,
-      isSameDay,
-      format: format,
-      getDaysForMonth,
+      format,
+      differenceInCalendarDays,
+      differenceInBusinessDays,
       scrollToToday,
+      zoomIn,
+      zoomOut,
     };
   },
 };

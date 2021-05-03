@@ -27,7 +27,9 @@ describe("Roadmap View", () => {
     expect(wrapper.text()).toMatch(tasks[0].title);
   });
 
-  it("Goes to today", () => {});
+  it("Goes to today", () => {
+    
+  });
 
   it("Zoom in to next mode", () => {});
 

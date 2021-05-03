@@ -16,7 +16,8 @@
         :key="day"
         class="w-10 text-center"
         :class="{
-          'text-blue-400 marker-day bg-gray-100 font-bold': isCurrentDay(day),
+          'text-blue-400 marker-day font-bold': isCurrentDay(day),
+          'bg-gray-100 font-bold': isWeekend(day),
         }"
       >
         <span
@@ -35,7 +36,7 @@
             class="border h-10 w-full relative"
           >
             <marker-point
-              :marker-bg-class="markerBgClass"
+              :marker-bg-class="task.colorClass || markerBgClass"
               :is-left-side="isSameDay(task.start, day)"
               :is-right-side="isSameDay(task.end, day)"
               :title="`${task.title} ${format(task.start, 'dd')}`"
@@ -65,6 +66,7 @@ import endOfMonth from "date-fns/endOfMonth";
 import isSameDay from "date-fns/fp/isSameDay";
 import { nextTick, onMounted, ref } from "vue";
 import MarkerPoint from "./MarkerPoint.vue";
+import isWeekend from 'date-fns/isWeekend';
 
 export default {
   name: "RoadmapViewDays",
@@ -115,6 +117,7 @@ export default {
       );
     };
 
+
     const gantDate = ref(null);
 
     onMounted(() => {
@@ -132,6 +135,7 @@ export default {
       isCurrentDay,
       isHourBetween,
       isSameDay,
+      isWeekend,
       format: format,
       gantDate,
       getDaysForMonth,

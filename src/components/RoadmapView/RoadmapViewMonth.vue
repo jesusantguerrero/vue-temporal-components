@@ -35,7 +35,7 @@
             class="border-t border-b h-10 w-full relative"
           >
             <marker-point
-              :marker-bg-class="markerBgClass"
+              :marker-bg-class="task.colorClass || markerBgClass"
               :is-left-side="isSameDay(task.start, day)"
               :is-right-side="isSameDay(task.end, day)"
               :title="`${task.title} ${format(task.start, 'dd')}`"

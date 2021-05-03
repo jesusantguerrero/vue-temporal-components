@@ -1,3 +1,3 @@
-import RoadmapView from "./RoadmapView/";
+import RoadmapView from "./RoadmapView/index.vue";
 
 export { RoadmapView };
