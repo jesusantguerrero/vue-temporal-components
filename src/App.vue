@@ -1,16 +1,20 @@
 <template>
-  <gant-vue :tasks="tasks" />
+  <roadmap-view 
+    :tasks="tasks" 
+    focused-text-class="text-green-500"
+    marker-bg-class="bg-green-400"
+  />
 </template>
 
 <script>
 import { reactive, toRefs } from "vue";
-import GantVue from "./components/GantVue";
+import RoadmapView from "./components/RoadmapView";
 import addDays from 'date-fns/addDays';
 
 export default {
   name: "App",
   components: {
-    GantVue,
+    RoadmapView
   },
   setup() {
     const state = reactive({
