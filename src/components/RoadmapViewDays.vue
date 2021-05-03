@@ -67,7 +67,7 @@ import { nextTick, onMounted, ref } from "vue";
 import MarkerPoint from "./MarkerPoint.vue";
 
 export default {
-  name: "RoadmapView",
+  name: "RoadmapViewDays",
   props: {
     tasks: Array,
     focusedTextClass: {

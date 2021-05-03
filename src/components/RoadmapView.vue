@@ -28,7 +28,7 @@
       </select>
     </div>
     <div class="custom-table flex w-full overflow-hidden border-t">
-      <div class="task-column w-52">
+      <div class="task-column w-52 border-r">
         <div class="task-col__header h-14 bg-gray-200">Task Title</div>
         <div
           class="task-col__cell h-10 border-b-2"
@@ -42,30 +42,13 @@
         class="months flex w-full overflow-x-auto gantt-scroller"
         ref="gantDate"
       >
-        <template v-if="viewType == 'w'">
-          <roadmap-view-week
-            :year="year"
-            :tasks="tasks"
-            :focused-text-class="focusedTextClass"
-            :marker-bg-class="markerBgClass"
-          />
-        </template>
-        <template v-else-if="viewType == 'm'">
-          <roadmap-view-month
-            :year="year"
-            :tasks="tasks"
-            :focused-text-class="focusedTextClass"
-            :marker-bg-class="markerBgClass"
-          />
-        </template>
-        <template v-else>
-          <roadmap-view-days
-            :year="year"
-            :tasks="tasks"
-            :focused-text-class="focusedTextClass"
-            :marker-bg-class="markerBgClass"
-          />
-        </template>
+        <component
+          :is="componentName"
+          :year="year"
+          :tasks="tasks"
+          :focused-text-class="focusedTextClass"
+          :marker-bg-class="markerBgClass"
+        />
       </div>
     </div>
   </div>
@@ -77,9 +60,10 @@ import format from "date-fns/format";
 import eachDayOfInterval from "date-fns/eachDayOfInterval";
 import endOfMonth from "date-fns/endOfMonth";
 import isSameDay from "date-fns/fp/isSameDay";
-import { nextTick, onMounted, reactive, toRefs } from "vue";
+import { computed, nextTick, onMounted, reactive, toRefs } from "vue";
 import RoadmapViewWeek from "./RoadmapViewWeek.vue";
 import RoadmapViewDays from "./RoadmapViewDays.vue";
+import RoadmapViewMonth from "./RoadmapViewMonth.vue";
 
 export default {
   name: "RoadmapView",
@@ -97,6 +81,7 @@ export default {
   components: {
     RoadmapViewWeek,
     RoadmapViewDays,
+    RoadmapViewMonth,
   },
   setup() {
     const getDaysForMonth = (month) => {
@@ -140,6 +125,14 @@ export default {
     const state = reactive({
       year: new Date(),
       viewType: "d",
+      componentName: computed(() => {
+        const components = {
+          d: "days",
+          w: "week",
+          m: "month",
+        };
+        return `roadmap-view-${components[state.viewType]}`;
+      }),
     });
 
     return {

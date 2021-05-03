@@ -14,25 +14,22 @@
       <div
         v-for="day in getDaysForMonth(month)"
         :key="day"
-        class="w-10 text-center"
+        class="w-2 text-center"
         :class="{
-          'text-blue-400 marker-day bg-gray-100 font-bold': isCurrentDay(day),
+          'marker-day font-bold': isCurrentDay(day),
         }"
       >
-        <span
-          class="inline-block pb-2 text-gray-400 text-sm w-full"
-          :class="{
-            [`${focusedTextClass} font-bold`]: isCurrentDay(day),
-          }"
-        >
-          {{ format(day, "dd") }}
+        <span class="inline-block h-6 text-gray-400 text-xs w-full" :class="{
+          'fix-day-height': isCurrentDay(day),
+        }" >
+          {{ isCurrentDay(day) ? "T" : "" }}
         </span>
         <!-- Task Cells -->
         <div class="units-body">
           <div
             v-for="task in tasks"
             :key="task.id"
-            class="border h-10 w-full relative"
+            class="border-t border-b h-10 w-full relative"
           >
             <marker-point
               :marker-bg-class="markerBgClass"
@@ -67,7 +64,7 @@ import { nextTick, onMounted, ref } from "vue";
 import MarkerPoint from "./MarkerPoint.vue";
 
 export default {
-  name: "RoadmapView",
+  name: "RoadmapViewMonth",
   props: {
     tasks: Array,
     focusedTextClass: {
@@ -142,33 +139,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.gantt-scroller {
-  &::-webkit-scrollbar-thumb {
-    background-color: transparentize($color: #000000, $amount: 0.7);
-    border-radius: 4px;
-
-    &:hover {
-      background-color: transparentize($color: #000000, $amount: 0.7);
-    }
-  }
-
-  &::-webkit-scrollbar {
-    background-color: transparent;
-    width: 5px;
-    height: 5px;
-  }
-
-  &-slim {
-    transition: all ease 0.3s;
-    &::-webkit-scrollbar {
-      height: 0;
-    }
-
-    &:hover {
-      &::-webkit-scrollbar {
-        height: 3px;
-      }
-    }
-  }
+.fix-day-height {
+  margin-bottom: 2px;
 }
 </style>
