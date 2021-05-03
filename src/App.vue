@@ -1,15 +1,32 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Welcome to Your Vue.js App" />
+  <gant-vue :tasks="tasks" />
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
+import { reactive, toRefs } from "vue";
+import GantVue from "./components/GantVue";
 
 export default {
   name: "App",
   components: {
-    HelloWorld,
+    GantVue,
+  },
+  setup() {
+    const state = reactive({
+      tasks: [
+        {
+          id: 1,
+          title: "Description",
+        },
+        {
+          id: 2,
+          title: "Description II",
+        },
+      ],
+    });
+    return {
+      ...toRefs(state),
+    };
   },
 };
 </script>
