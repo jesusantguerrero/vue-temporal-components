@@ -14,7 +14,7 @@
         <option value="">Month</option>
       </select>
     </div>
-    <div class="custom-table">
+    <div class="custom-table flex">
       <div class="task-column">
         <div class="task-col__header">Task Title</div>
         <div class="task-col__cell" v-for="task in tasks" :key="task.id">
@@ -31,8 +31,7 @@
 </template>
 
 <script>
-import { eachMonthOfInterval, startOfYear } from "date-fns"
-import endOfYear from 'date-fns/endOfYear';
+import { eachMonthOfInterval, startOfYear, endOfYear } from "date-fns"
 export default {
   name: "GantVue",
   props: {
