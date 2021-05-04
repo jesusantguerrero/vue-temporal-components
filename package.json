@@ -49,5 +49,13 @@
     "temporal"
   ],
   "author": "Jesus Guerrero",
-  "license": "MIT"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jesusantguerrero/vue-temporal-components.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jesusantguerrero/vue-temporal-components/issues"
+  },
+  "homepage": "https://github.com/jesusantguerrero/vue-temporal-components#readme"
 }
