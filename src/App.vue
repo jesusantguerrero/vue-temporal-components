@@ -1,9 +1,13 @@
 <template>
-  <roadmap-view
-    :tasks="tasks"
-    focused-text-class="text-green-500"
-    marker-bg-class="bg-green-400"
-  />
+  <div class="px-5">
+    <roadmap-view
+      :tasks="tasks"
+      :show-search="true"
+      :show-toolbar="true"
+      focused-text-class="text-green-500"
+      marker-bg-class="bg-green-400"
+    />
+  </div>
 </template>
 
 <script>
