@@ -73,7 +73,6 @@
 import { computed, onBeforeUnmount, reactive, watch } from "vue";
 import { Duration, Interval, DateTime } from "luxon";
 import { usePromodoro } from "../../utils/usePromodoro";
-import { ElMessageBox } from "element-plus";
 import { useTitle } from "@vueuse/core";
 
 export default {

@@ -64,7 +64,7 @@ import {
   eachWeekOfInterval,
   isWeekend
 } from "date-fns";
-import { nextTick, onMounted, ref } from "vue";
+import { ref } from "vue";
 import MarkerPoint from "./MarkerPoint.vue";
 
 export default {
@@ -108,22 +108,8 @@ export default {
       );
     };
 
-    const scrollToToday = (smooth) => {
-      const day = document.querySelector(".marker-day");
-      day.scrollIntoView(
-        smooth
-          ? { behavior: "smooth", block: "center", inline: "start" }
-          : { inline: "center" }
-      );
-    };
 
     const gantDate = ref(null);
-
-    onMounted(() => {
-      nextTick(() => {
-        scrollToToday();
-      });
-    });
 
     return {
       mainIntervalTime: eachWeekOfInterval({
@@ -139,7 +125,6 @@ export default {
       addDays,
       gantDate,
       getDaysForInterval,
-      scrollToToday,
     };
   },
 };

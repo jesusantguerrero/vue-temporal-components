@@ -83,6 +83,7 @@ import RoadmapViewMonth from "./RoadmapViewMonth.vue";
 
 import { differenceInCalendarDays } from "date-fns";
 import { computed, nextTick, onMounted, reactive, toRefs } from "vue";
+import { scrollToToday } from "./utils";
 
 defineProps({
   tasks: Array,
@@ -103,17 +104,6 @@ defineProps({
     default: "bg-red-500",
   },
 });
-
-const scrollToToday = (smooth) => {
-  const day = document.querySelector(".marker-day");
-  if (day && day.scrollIntoView) {
-    day.scrollIntoView(
-      smooth
-        ? { behavior: "smooth", block: "center", inline: "center" }
-        : { inline: "center" }
-    );
-  }
-};
 
 onMounted(() => {
   nextTick(() => {
