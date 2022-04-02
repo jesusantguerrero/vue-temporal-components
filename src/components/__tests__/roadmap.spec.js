@@ -1,5 +1,5 @@
 import { shallowMount } from "@vue/test-utils";
-import { RoadmapView } from "@/components";
+import { RoadmapView } from "../index";
 import "@testing-library/jest-dom";
 import { render, screen, fireEvent } from "@testing-library/vue";
 import { addDays } from "date-fns";

@@ -1,16 +1,16 @@
 <template>
   <div
-    class="task-col__header border-r text-left relative"
+    class="relative text-left border-r task-col__header"
     v-for="week in mainIntervalTime"
     :key="week"
   >
     <span
-      class="font-bold text-gray-400 pl-2 text-sm"
+      class="pl-2 text-sm font-bold text-gray-400"
       :class="{ [`${focusedTextClass} marker`]: isCurrentWeek(week) }"
     >
       {{ format(week, "MMM dd") }} - {{ format(addDays(week, 6), "MMM dd") }}
     </span>
-    <div class="units flex">
+    <div class="flex units">
       <div
         v-for="day in getDaysForInterval(week, addDays(week, 6))"
         :key="day"
@@ -21,7 +21,7 @@
         }"
       >
         <span
-          class="inline-block pb-2 text-gray-400 text-sm w-full"
+          class="inline-block w-full pb-2 text-sm text-gray-400"
           :class="{
             [`${focusedTextClass} font-bold`]: isCurrentDay(day),
           }"
@@ -33,7 +33,7 @@
           <div
             v-for="task in tasks"
             :key="task.id"
-            class="border h-10 w-full relative"
+            class="relative w-full h-10 border"
           >
             <marker-point
               :marker-bg-class="task.colorClass || markerBgClass"

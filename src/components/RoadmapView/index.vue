@@ -76,110 +76,95 @@
   </div>
 </template>
 
-<script>
-import {
-  format,
-  differenceInCalendarDays,
-  differenceInBusinessDays,
-} from "date-fns";
-import { computed, nextTick, onMounted, reactive, toRefs } from "vue";
+<script setup>
 import RoadmapViewWeek from "./RoadmapViewWeek.vue";
 import RoadmapViewDays from "./RoadmapViewDays.vue";
 import RoadmapViewMonth from "./RoadmapViewMonth.vue";
 
-export default {
-  name: "RoadmapView",
-  props: {
-    tasks: Array,
-    focusedTextClass: {
-      type: String,
-      default: "text-blue-500",
-    },
-    showToolbar: {
-      type: Boolean,
-      default: false,
-    },
-    showSearch: {
-      type: Boolean,
-      default: false,
-    },
-    markerBgClass: {
-      type: String,
-      default: "bg-red-500",
-    },
+import { differenceInCalendarDays } from "date-fns";
+import { computed, nextTick, onMounted, reactive, toRefs } from "vue";
+
+defineProps({
+  tasks: Array,
+  focusedTextClass: {
+    type: String,
+    default: "text-blue-500",
   },
-  components: {
-    RoadmapViewWeek,
-    RoadmapViewDays,
-    RoadmapViewMonth,
+  showToolbar: {
+    type: Boolean,
+    default: false,
   },
-  setup() {
-    const scrollToToday = (smooth) => {
-      const day = document.querySelector(".marker-day");
-      if (day && day.scrollIntoView) {
-        day.scrollIntoView(
-          smooth
-            ? { behavior: "smooth", block: "center", inline: "center" }
-            : { inline: "center" }
-        );
-      }
-    };
-
-    onMounted(() => {
-      nextTick(() => {
-        scrollToToday();
-      });
-    });
-
-    const state = reactive({
-      year: new Date(),
-      viewType: "d",
-      viewTypes: {
-        d: "days",
-        w: "week",
-        m: "month",
-      },
-      modes: computed(() => {
-        return Object.keys(state.viewTypes);
-      }),
-      currentMode: computed(() => {
-        return state.modes.findIndex((mode) => mode == state.viewType);
-      }),
-      canZoomIn: computed(() => {
-        return state.currentMode !== 0;
-      }),
-      canZoomOut: computed(() => {
-        return state.currentMode !== state.modes.length - 1;
-      }),
-
-      componentName: computed(() => {
-        return `roadmap-view-${state.viewTypes[state.viewType]}`;
-      }),
-    });
-
-    const zoomIn = () => {
-      if (state.canZoomIn) {
-        state.viewType = state.modes[state.currentMode - 1];
-      }
-    };
-
-    const zoomOut = () => {
-      if (state.canZoomOut) {
-        state.viewType = state.modes[state.currentMode + 1];
-      }
-    };
-
-    return {
-      ...toRefs(state),
-      format,
-      differenceInCalendarDays,
-      differenceInBusinessDays,
-      scrollToToday,
-      zoomIn,
-      zoomOut,
-    };
+  showSearch: {
+    type: Boolean,
+    default: false,
   },
+  markerBgClass: {
+    type: String,
+    default: "bg-red-500",
+  },
+});
+
+const scrollToToday = (smooth) => {
+  const day = document.querySelector(".marker-day");
+  if (day && day.scrollIntoView) {
+    day.scrollIntoView(
+      smooth
+        ? { behavior: "smooth", block: "center", inline: "center" }
+        : { inline: "center" }
+    );
+  }
 };
+
+onMounted(() => {
+  nextTick(() => {
+    scrollToToday();
+  });
+});
+
+const state = reactive({
+  year: new Date(),
+  viewType: "d",
+  viewTypes: {
+    d: "days",
+    w: "week",
+    m: "month",
+  },
+  modes: computed(() => {
+    return Object.keys(state.viewTypes);
+  }),
+  currentMode: computed(() => {
+    return state.modes.findIndex((mode) => mode == state.viewType);
+  }),
+  canZoomIn: computed(() => {
+    return state.currentMode !== 0;
+  }),
+  canZoomOut: computed(() => {
+    return state.currentMode !== state.modes.length - 1;
+  }),
+
+  componentName: computed(() => {
+    const components = {
+      d: RoadmapViewDays,
+      w: RoadmapViewWeek,
+      m: RoadmapViewMonth,
+    };
+    return components[state.viewType];
+  }),
+});
+
+const zoomIn = () => {
+  if (state.canZoomIn) {
+    state.viewType = state.modes[state.currentMode - 1];
+  }
+};
+
+const zoomOut = () => {
+  if (state.canZoomOut) {
+    state.viewType = state.modes[state.currentMode + 1];
+  }
+};
+
+const { year, viewType, canZoomIn, canZoomOut, componentName } = toRefs(state);
 </script>
 
 <style scoped lang="scss">
