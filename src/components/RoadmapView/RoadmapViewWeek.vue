@@ -129,35 +129,3 @@ export default {
   },
 };
 </script>
-
-<style scoped lang="scss">
-.gantt-scroller {
-  &::-webkit-scrollbar-thumb {
-    background-color: transparentize($color: #000000, $amount: 0.7);
-    border-radius: 4px;
-
-    &:hover {
-      background-color: transparentize($color: #000000, $amount: 0.7);
-    }
-  }
-
-  &::-webkit-scrollbar {
-    background-color: transparent;
-    width: 5px;
-    height: 5px;
-  }
-
-  &-slim {
-    transition: all ease 0.3s;
-    &::-webkit-scrollbar {
-      height: 0;
-    }
-
-    &:hover {
-      &::-webkit-scrollbar {
-        height: 3px;
-      }
-    }
-  }
-}
-</style>
