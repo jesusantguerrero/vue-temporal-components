@@ -45,7 +45,7 @@
       </div>
     </div>
     <div class="flex w-full overflow-hidden border-t custom-table">
-      <div class="border-r task-column min-w-min">
+      <div class="border-r task-column min-w-fit">
         <div
           class="flex items-center justify-center font-bold text-gray-500 bg-gray-100 task-col__header h-14"
         >

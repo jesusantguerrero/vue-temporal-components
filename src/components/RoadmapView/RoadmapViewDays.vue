@@ -110,7 +110,7 @@ export default {
       );
     };
 
-    const gantDate = ref(null);
+    const ganttDate = ref(null);
 
     onMounted(() => {
       nextTick(() => {
@@ -129,7 +129,7 @@ export default {
       isSameDay,
       isWeekend,
       format: format,
-      gantDate,
+      ganttDate,
       getDaysForMonth,
       scrollToToday,
     };
