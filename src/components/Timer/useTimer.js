@@ -61,9 +61,6 @@ export const useTimer = (
   });
 
   // UI
-  const trackerIcon = computed(() =>
-    state.now ? "fas fa-stop" : "fas fa-play"
-  );
   const trackerMode = computed(() => state.modes[state.mode]);
   const promodoroTotal = computed(() => {
     return template
@@ -271,7 +268,6 @@ export const useTimer = (
   return {
     state,
     ui: reactive({
-      trackerIcon,
       trackerMode,
       promodoroTotal,
       currentStateColor,
