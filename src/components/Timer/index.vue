@@ -72,8 +72,7 @@
 <script>
 import { computed, onBeforeUnmount, reactive, watch } from "vue";
 import { Duration, Interval, DateTime } from "luxon";
-import { usePromodoro } from "../../utils/usePromodoro";
-import { useTitle } from "@vueuse/core";
+import { useTimer } from "./useTimer";
 
 export default {
   name: "TimeTrackerClock",
@@ -243,7 +242,7 @@ export default {
     );
 
     // Settings
-    const { playSound, stopSound, showNotification } = usePromodoro();
+    const { playSound, stopSound, showNotification } = useTimeTracker();
 
     // Controls
     const toggleTracker = () => {

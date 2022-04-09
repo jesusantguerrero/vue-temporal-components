@@ -2,6 +2,7 @@
 import { reactive } from "vue";
 import { RoadmapView } from "./components";
 import addDays from "date-fns/addDays";
+import Timer from "./components/Timer/index.vue";
 
 const tasks = reactive([
   {
@@ -28,5 +29,6 @@ const tasks = reactive([
       focused-text-class="text-green-500"
       marker-bg-class="bg-green-400"
     />
+    <timer />
   </div>
 </template>
