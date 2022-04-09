@@ -1,6 +1,6 @@
 {
   "name": "vue-temporal-components",
-  "version": "0.1.6",
+  "version": "0.2.0",
   "main": "dist/vue-temporal-components.es.js",
   "unpkg": "dist/vue-temporal-components.umd.js",
   "scripts": {
@@ -11,7 +11,7 @@
     "test:ui": "vitest --ui",
     "test:unit": "vitest",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
-    "lib": "vue-cli-service build --target lib --name vue-temporal-components ./src/components/index.js"
+    "release": "bumpp --commit --tag --push && npm publish"
   },
   "exports": {
     ".": {
@@ -36,6 +36,7 @@
     "@vue/test-utils": "^2.0.0-rc.18",
     "@vueuse/core": "^8.2.5",
     "autoprefixer": "^9.8.6",
+    "bumpp": "^7.1.1",
     "date-fns": "^2.21.1",
     "eslint": "^8.5.0",
     "eslint-plugin-vue": "^8.2.0",
