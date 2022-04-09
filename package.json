@@ -10,6 +10,7 @@
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:unit": "vitest",
+    "coverage": "vitest run --coverage",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
     "release": "bumpp --commit --tag --push && npm publish"
   },
@@ -37,6 +38,7 @@
     "@vueuse/core": "^8.2.5",
     "autoprefixer": "^9.8.6",
     "bumpp": "^7.1.1",
+    "c8": "^7.11.0",
     "date-fns": "^2.21.1",
     "eslint": "^8.5.0",
     "eslint-plugin-vue": "^8.2.0",
