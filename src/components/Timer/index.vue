@@ -56,10 +56,9 @@
           </div>
         </div>
 
-        <i
-          class="fas"
-          :class="[state.trackerIcon, isMini ? 'mr-2' : 'text-3xl']"
-        ></i>
+        <div :class="[isMini ? 'mr-1 text-4xl' : 'text-5xl']">
+          <component :is="trackerIcon" />
+        </div>
       </div>
       <button
         v-if="!isMini"
@@ -76,6 +75,8 @@
 import { computed } from "@vue/reactivity";
 import { useTimer } from "./useTimer";
 import { PROMODORO_TEMPLATE } from "./useTimeTracker";
+import IconSharpPlayArrow from "../atoms/IconSharpPlayArrow.vue";
+import IconSharpPause from "../atoms/IconSharpPause.vue";
 
 const props = defineProps({
   task: {
@@ -104,5 +105,9 @@ const { state, controls, ui } = useTimer({
 
 const isMini = computed(() => {
   return props.size == "mini";
+});
+
+const trackerIcon = computed(() => {
+  return state.now ? IconSharpPause : IconSharpPlayArrow;
 });
 </script>
