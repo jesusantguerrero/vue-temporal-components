@@ -1,6 +1,6 @@
 <template>
   <span
-    class="marker-point inline-block h-4 w-full mt-2 cursor-pointer absolute left-0"
+    class="absolute left-0 inline-block w-full h-4 mt-2 cursor-pointer marker-point"
     :class="{
       [`${markerBgClass}`]: true,
       'rounded-l-lg task-marker__side': isLeftSide,

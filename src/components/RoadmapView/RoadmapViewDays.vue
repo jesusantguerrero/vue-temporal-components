@@ -1,16 +1,16 @@
 <template>
   <div
-    class="task-col__header border-r text-left relative"
+    class="relative text-left border-r task-col__header"
     v-for="month in months"
     :key="month"
   >
     <span
-      class="font-bold text-gray-400 pl-2 text-sm"
+      class="pl-2 text-sm font-bold text-gray-400"
       :class="{ [`${focusedTextClass} marker`]: isCurrentMonth(month) }"
     >
       {{ format(month, "MMM yyyy") }}
     </span>
-    <div class="units flex">
+    <div class="flex units">
       <div
         v-for="day in getDaysForMonth(month)"
         :key="day"
@@ -21,7 +21,7 @@
         }"
       >
         <span
-          class="inline-block pb-2 text-gray-400 text-sm w-full"
+          class="inline-block w-full pb-2 text-sm text-gray-400"
           :class="{
             [`${focusedTextClass} font-bold`]: isCurrentDay(day),
           }"
@@ -33,7 +33,7 @@
           <div
             v-for="task in tasks"
             :key="task.id"
-            class="border h-10 w-full relative"
+            class="relative w-full h-10 border"
           >
             <marker-point
               :marker-bg-class="task.colorClass || markerBgClass"
@@ -66,7 +66,8 @@ import endOfMonth from "date-fns/endOfMonth";
 import isSameDay from "date-fns/fp/isSameDay";
 import { nextTick, onMounted, ref } from "vue";
 import MarkerPoint from "./MarkerPoint.vue";
-import isWeekend from 'date-fns/isWeekend';
+import isWeekend from "date-fns/isWeekend";
+import { scrollToToday } from "./utils";
 
 export default {
   name: "RoadmapViewDays",
@@ -109,17 +110,7 @@ export default {
       );
     };
 
-    const scrollToToday = (smooth) => {
-      const day = document.querySelector(".marker-day");
-      day.scrollIntoView(
-        smooth
-          ? { behavior: "smooth", block: "center", inline: "start" }
-          : { inline: "center" }
-      );
-    };
-
-
-    const gantDate = ref(null);
+    const ganttDate = ref(null);
 
     onMounted(() => {
       nextTick(() => {
@@ -138,42 +129,10 @@ export default {
       isSameDay,
       isWeekend,
       format: format,
-      gantDate,
+      ganttDate,
       getDaysForMonth,
       scrollToToday,
     };
   },
 };
 </script>
-
-<style scoped lang="scss">
-.gantt-scroller {
-  &::-webkit-scrollbar-thumb {
-    background-color: transparentize($color: #000000, $amount: 0.7);
-    border-radius: 4px;
-
-    &:hover {
-      background-color: transparentize($color: #000000, $amount: 0.7);
-    }
-  }
-
-  &::-webkit-scrollbar {
-    background-color: transparent;
-    width: 5px;
-    height: 5px;
-  }
-
-  &-slim {
-    transition: all ease 0.3s;
-    &::-webkit-scrollbar {
-      height: 0;
-    }
-
-    &:hover {
-      &::-webkit-scrollbar {
-        height: 3px;
-      }
-    }
-  }
-}
-</style>

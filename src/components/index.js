@@ -1,3 +1,4 @@
 import "../assets/main.scss";
 import RoadmapView from "./RoadmapView/index.vue";
-export { RoadmapView };
+import Timer from "./Timer/index.vue";
+export { RoadmapView, Timer };

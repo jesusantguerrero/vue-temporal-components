@@ -65,6 +65,7 @@ import endOfMonth from "date-fns/endOfMonth";
 import isSameDay from "date-fns/fp/isSameDay";
 import { nextTick, onMounted, ref } from "vue";
 import MarkerPoint from "./MarkerPoint.vue";
+import { scrollToToday } from "./utils";
 
 export default {
   name: "RoadmapViewMonth",
@@ -104,15 +105,6 @@ export default {
         (isAfter(date, start) && isBefore(date, end)) ||
         isSameDay(date, start) ||
         isSameDay(end, date)
-      );
-    };
-
-    const scrollToToday = (smooth) => {
-      const day = document.querySelector(".marker-day");
-      day.scrollIntoView(
-        smooth
-          ? { behavior: "smooth", block: "center", inline: "start" }
-          : { inline: "center" }
       );
     };
 
