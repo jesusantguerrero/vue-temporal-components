@@ -29,6 +29,8 @@ const tasks = reactive([
       focused-text-class="text-green-500"
       marker-bg-class="bg-green-400"
     />
-    <timer />
+    <timer :task="tasks[0]" />
+
+    <timer :task="tasks[0]" size="mini" />
   </div>
 </template>
