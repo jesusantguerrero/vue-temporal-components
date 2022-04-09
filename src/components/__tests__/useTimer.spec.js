@@ -29,13 +29,13 @@ describe("useTimer", () => {
       confirmFunction: () => console.log("DEBUG::confirm"),
     });
     let time = "";
-    expect(ui.currentTime.value).toBe("25:00");
+    expect(ui.currentTime).toBe("25:00");
     controls.play();
     vi.advanceTimersByTime(2000);
-    time = ui.currentTime.value;
+    time = ui.currentTime;
     vi.clearAllTimers();
     controls.stop();
     expect(time).toBe("24:58");
-    expect(ui.currentTime.value).toBe("05:00");
+    expect(ui.currentTime).toBe("05:00");
   });
 });

@@ -270,7 +270,7 @@ export const useTimer = (
 
   return {
     state,
-    ui: {
+    ui: reactive({
       trackerIcon,
       trackerMode,
       promodoroTotal,
@@ -278,7 +278,7 @@ export const useTimer = (
       hasPrevMode,
       targetTime,
       currentTime,
-    },
+    }),
     controls: {
       toggleTracker,
       stop,
