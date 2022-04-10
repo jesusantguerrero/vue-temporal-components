@@ -8,9 +8,9 @@
     "build": "vite build",
     "preview": "vite preview --port 5050",
     "test": "vitest",
-    "test:ui": "vitest --ui",
     "test:unit": "vitest",
-    "coverage": "vitest run --coverage",
+    "test:component": "cypress open-ct",
+    "coverage": "vitest --coverage",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
     "release": "bumpp --commit --tag --push && npm publish"
   },
@@ -22,11 +22,15 @@
     "./*": "./*"
   },
   "dependencies": {
+    "@cypress/vue": "^3.1.0",
+    "@cypress/webpack-dev-server": "^1.8.4",
+    "cypress": "^9.5.3",
     "luxon": "^2.3.1",
     "mitt": "^3.0.0",
     "vue": "^3.2.31"
   },
   "devDependencies": {
+    "@cypress/vite-dev-server": "^2.2.2",
     "@rushstack/eslint-patch": "^1.1.0",
     "@testing-library/jest-dom": "^5.12.0",
     "@testing-library/vue": "^6.4.0",
