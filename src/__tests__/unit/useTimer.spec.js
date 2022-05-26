@@ -1,30 +1,14 @@
 import "@testing-library/jest-dom";
-import { useTimer } from "../Timer/useTimer";
+import { useTimer } from "../../components/Timer/useTimer";
 import { vi, describe, it, expect } from "vitest";
-import { PROMODORO_TEMPLATE } from "../Timer/useTimeTracker";
-
-const task = {
-  uid: undefined,
-  title: "",
-  description: "",
-  due_date: "",
-  duration: "",
-  tags: [],
-  contacts: [],
-  checklist: [],
-  tracks: [],
-  order: 0,
-  duration_ms: 0,
-  done: false,
-  commit_date: null,
-  matrix: "todo",
-};
+import { PROMODORO_TEMPLATE } from "../../components/Timer/useTimeTracker";
+import { tasks } from "../utils";
 
 describe("useTimer", () => {
   it("Play and stop pomodoro correctly", async () => {
     vi.useFakeTimers();
     const { ui, controls } = useTimer({
-      task,
+      task: tasks[0],
       template: PROMODORO_TEMPLATE,
       confirmFunction: () => console.log("DEBUG::confirm"),
     });

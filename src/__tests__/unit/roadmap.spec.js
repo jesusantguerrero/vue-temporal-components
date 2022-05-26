@@ -1,23 +1,8 @@
 import { shallowMount } from "@vue/test-utils";
-import { RoadmapView } from "../index";
-import "@testing-library/jest-dom";
+import { describe, it, expect } from "vitest";
+import { RoadmapView } from "../../components";
 import { render, screen, fireEvent } from "@testing-library/vue";
-import { addDays } from "date-fns";
-
-const tasks = [
-  {
-    id: 1,
-    title: "Description",
-    start: new Date(),
-    end: addDays(new Date(), 2),
-  },
-  {
-    id: 2,
-    title: "Description II",
-    start: new Date(),
-    end: addDays(new Date(), 4),
-  },
-];
+import { tasks } from "../utils";
 
 describe("Roadmap View", () => {
   it("renders props.tasks when passed", () => {

@@ -17,12 +17,12 @@
     <div class="flex items-center">
       <button
         v-if="!isMini"
-        class="text-2xl text-gray-400 rounded-full focus:outline-none dark:hover:bg-gray-600 h-14 w-14"
+        class="flex items-center justify-center text-4xl text-gray-400 rounded-full focus:outline-none h-14 w-14"
         :class="{ 'hover:bg-gray-100': ui.hasPrevMode }"
         @click="controls.prevMode"
         :disabled="!ui.hasPrevMode"
       >
-        <i class="fa fa-chevron-left"></i>
+        <icon-sharp-chevron-left />
       </button>
       <div
         class="flex items-center justify-center cursor-pointer"
@@ -34,9 +34,10 @@
             ? 'w-20 flex-row-reverse'
             : 'h-52 w-52 rounded-full flex-col space-y-3 border-2',
         ]"
+        data-test-id="btn-play"
         title="Click here to start"
       >
-        <div
+        <div data-test-id="current-time"
           class="select-none"
           :class="[isMini ? 'w-full text-center text-2xl' : 'text-5xl']"
         >
@@ -62,10 +63,10 @@
       </div>
       <button
         v-if="!isMini"
-        class="text-2xl text-gray-400 rounded-full hover:bg-gray-100 dark:hover:bg-gray-600 focus:outline-none h-14 w-14"
+        class="flex items-center justify-center text-4xl text-gray-400 rounded-full hover:bg-gray-100 focus:outline-none h-14 w-14"
         @click="controls.nextMode"
       >
-        <i class="fa fa-chevron-right"></i>
+        <icon-sharp-chevron-right />
       </button>
     </div>
   </div>
@@ -77,6 +78,8 @@ import { useTimer } from "./useTimer";
 import { PROMODORO_TEMPLATE } from "./useTimeTracker";
 import IconSharpPlayArrow from "../atoms/IconSharpPlayArrow.vue";
 import IconSharpPause from "../atoms/IconSharpPause.vue";
+import IconSharpChevronRight from "../atoms/IconSharpChevronRight.vue";
+import IconSharpChevronLeft from "../atoms/IconSharpChevronLeft.vue";
 
 const props = defineProps({
   task: {

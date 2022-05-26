@@ -3,16 +3,29 @@ import { Duration, Interval, DateTime } from "luxon";
 import { useTimeTracker, PROMODORO_TEMPLATE } from "./useTimeTracker";
 import { useTitle } from "@vueuse/core";
 
-export const useTimer = (
-  { task, template, confirmFunction, onStarted, onStopped, onTick } = {
-    task: {},
-    template: PROMODORO_TEMPLATE,
-    confirmFunction: confirm,
-    onStarted: (data) => { console.log("DEBUG::onStarted", data); },
-    onStopped: () => {},
-    onTick: () => {},
-  }
-) => {
+export const trackerConfig = {
+  task: {},
+  template: PROMODORO_TEMPLATE,
+  confirmFunction: confirm,
+  onStarted: (data) => {
+    console.log("DEBUG::onStarted", data);
+  },
+  onStopped: () => {},
+  onTick: () => {},
+};
+
+export const mergeConfig = (propsData) => {
+  return Object.keys(trackerConfig).reduce((config, key) => {
+    if (propsData[key] !== undefined || propsData[key] !== null) {
+      config[key] = propsData[key];
+    }
+    return config;
+  }, trackerConfig);
+};
+
+export const useTimer = (config) => {
+  const { task, template, confirmFunction, onStarted, onStopped, onTick } = mergeConfig(config);
+  console.log(template);
   // state
   const state = reactive({
     currentStep: 0,
@@ -105,7 +118,7 @@ export const useTimer = (
       ).toDuration();
       // eslint-disable-next-line vue/no-side-effects-in-computed-properties
       state.track.currentTime = duration;
-      if (duration) {
+      if (duration && state.durationTarget) {
         duration = state.durationTarget.minus(duration).plus({ seconds: 0.9 });
         return duration.as("seconds") < 0
           ? "00:00"
