@@ -10,6 +10,7 @@
     "test": "vitest",
     "test:unit": "vitest",
     "test:component": "cypress open-ct",
+    "test:e2e": "cypress open",
     "coverage": "vitest --coverage",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
     "release": "bumpp --commit --tag --push && npm publish"

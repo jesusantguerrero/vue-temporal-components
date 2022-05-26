@@ -18,8 +18,9 @@ describe("Timer component", () => {
   });
 
   it("Should run the timer", () => {
+    cy.clock();
     cy.get("[data-test-id*=btn-play]").click();
-    cy.clock().tick(2000);
+    cy.tick(2000);
     cy.get("[data-test-id*=current-time]").contains("24:58");
     cy.get("[data-test-id*=btn-play]").click();
   });
