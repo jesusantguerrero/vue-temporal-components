@@ -11,6 +11,9 @@ describe("useTimer", () => {
       task: tasks[0],
       template: PROMODORO_TEMPLATE,
       confirmFunction: () => console.log("DEBUG::confirm"),
+      onStarted() {
+        console.log("Here starting");
+      },
     });
     let time = "";
     expect(ui.currentTime).toBe("25:00");
