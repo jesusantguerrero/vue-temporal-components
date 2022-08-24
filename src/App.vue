@@ -18,6 +18,8 @@ const tasks = reactive([
     end: addDays(new Date(), 4),
   },
 ]);
+
+const debugEvent = (evt) => console.log(evt)
 </script>
 
 <template>
@@ -31,6 +33,12 @@ const tasks = reactive([
     />
     <timer :task="tasks[0]" />
 
-    <timer :task="tasks[0]" size="mini" />
+    <timer
+      :task="tasks[0]"
+      size="mini"
+      @started="debugEvent"
+      @stopped="debugEvent"
+      @tick="debugEvent"
+    />
   </div>
 </template>

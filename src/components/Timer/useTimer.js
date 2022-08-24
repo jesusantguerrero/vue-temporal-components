@@ -1,4 +1,4 @@
-import { computed, onBeforeUnmount, reactive, watch } from "vue";
+import { computed, onBeforeUnmount, onUnmounted, reactive, watch } from "vue";
 import { Duration, Interval, DateTime } from "luxon";
 import { useTimeTracker, PROMODORO_TEMPLATE } from "./useTimeTracker";
 import { useTitle } from "@vueuse/core";
@@ -24,8 +24,8 @@ export const mergeConfig = (propsData) => {
 };
 
 export const useTimer = (config) => {
-  const { task, template, confirmFunction, onStarted, onStopped, onTick } = mergeConfig(config);
-  console.log(template);
+  const { task, template, confirmFunction, onStarted, onStopped, onTick } =
+    mergeConfig(config);
   // state
   const state = reactive({
     currentStep: 0,
@@ -66,8 +66,7 @@ export const useTimer = (config) => {
       task_uid: null,
       started_at: null,
       ended_at: null,
-      type: "promodoro",
-      duration: null,
+      type: "pomodoro",
       target_time: null,
       completed: false,
     }),
@@ -159,24 +158,29 @@ export const useTimer = (config) => {
     state.track.started_at ? stop(null, true) : play();
   };
 
-  const play = () => {
+  function play() {
     stopSound();
     state.track.started_at = new Date();
     state.now = state.track.started_at;
+    let formData = {};
 
     if (state.mode == "promodoro") {
-      createTrack(state.track);
+      formData = createTrack(state.track);
     }
 
+    onStarted && onStarted(formData);
+    onTick && onTick(state.track);
     state.timer = setInterval(() => {
       state.now = new Date();
+      onTick && onTick(state.track);
     }, 100);
-  };
+  }
 
   const stop = (shouldCallNextMode = true, silent) => {
     state.track.ended_at = new Date();
+    let formData = {};
     if (state.mode == "promodoro" && state.now) {
-      updateTrackFromLocal({ ...state.track });
+      formData = closeTrack({ ...state.track });
     }
 
     const wasRunning = Boolean(state.now);
@@ -186,6 +190,7 @@ export const useTimer = (config) => {
     clearTrack();
     clearInterval(state.timer);
     state.now = null;
+    onStopped && onStopped(formData);
 
     if (shouldCallNextMode) {
       nextMode();
@@ -229,13 +234,26 @@ export const useTimer = (config) => {
     state.currentStep = nextMode;
     setDurationTarget();
   };
+  //  resume
+  const resume = (currentTimer) => {
+    state.track.uid = currentTimer.uid;
+    state.track.started_at = currentTimer.started_at;
+    state.track.task_uid = currentTimer.task_uid;
+    state.track.description = currentTimer.description;
+    state.track.target_time = currentTimer.target_time;
+    state.track.subtype = currentTimer.subtype;
+    state.track.completed = false;
+    state.durationTarget = Duration.fromISO(currentTimer.target_time);
+    state.timer = setInterval(() => {
+      state.now = new Date();
+    }, 100);
+  };
 
   // data management / persistence
   const clearTrack = () => {
     clearInterval(state.timer);
     state.track.started_at = null;
     state.track.ended_at = null;
-    state.track.duration = null;
     state.track.target_time = null;
     state.track.completed = false;
   };
@@ -246,21 +264,19 @@ export const useTimer = (config) => {
     state.track.target_time = state.durationTarget.toISO();
     const formData = { ...state.track };
     delete formData.currentTime;
-    onStarted && onStarted(formData);
-    onTick && onTick(state.track);
+    return formData;
   };
 
-  const updateTrackFromLocal = (track) => {
+  const closeTrack = (track) => {
     const formData = { ...track };
     const duration = Interval.fromDateTimes(
       formData.started_at,
       formData.ended_at
     ).toDuration();
-    (formData.duration_ms = duration.as("milliseconds")),
-      (formData.duration_iso = duration.toISO()),
-      delete formData.currentTime;
-    onStopped && onStopped(formData);
-    onTick && onTick({});
+    formData.duration_ms = duration.as("milliseconds");
+    formData.duration_iso = duration.toISO();
+    delete formData.currentTime;
+    return formData;
   };
 
   // checks to stop
@@ -296,6 +312,7 @@ export const useTimer = (config) => {
       prevMode,
       nextMode,
       clearTrack,
+      resume,
     },
   };
 };

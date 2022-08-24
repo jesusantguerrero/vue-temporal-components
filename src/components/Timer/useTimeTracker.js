@@ -73,7 +73,6 @@ export function useTimeTracker() {
     promodoroState.volume = settings.promodoro_alert_volume || 100;
   };
 
-
   const playSound = async () => {
     // stopSound();
     // const localVolume = volume || promodoroState.volume / 100;
