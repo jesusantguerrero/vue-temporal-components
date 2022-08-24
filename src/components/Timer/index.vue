@@ -23,10 +23,10 @@
       >
         <IconSharpChevronLeft />
       </Button>
-      <div
+      <button
+        type="button"
         class="flex items-center justify-center cursor-pointer"
         role="button"
-        @click="toggleTracker"
         :class="[
           ui.trackerMode.color,
           ui.trackerMode.colorBorder,
@@ -36,6 +36,7 @@
         ]"
         data-testid="btn-play"
         title="Click here to start"
+        @click="toggleTracker()"
       >
         <div
           class="select-none"
@@ -60,7 +61,7 @@
         <div :class="[isMini ? 'mr-1 text-4xl' : 'text-5xl']">
           <component :is="trackerIcon" />
         </div>
-      </div>
+      </button>
       <Button v-if="!isMini" @click="controls.nextMode" class="ml-2">
         <IconSharpChevronRight />
       </Button>
@@ -98,6 +99,7 @@ const props = defineProps({
     },
   },
 });
+
 const emit = defineEmits(["started", "stopped", "tick"]);
 
 const { state, controls, ui } = useTimer({

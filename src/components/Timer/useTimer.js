@@ -1,4 +1,4 @@
-import { computed, onBeforeUnmount, onUnmounted, reactive, watch } from "vue";
+import { computed, onBeforeUnmount, reactive, watch } from "vue";
 import { Duration, Interval, DateTime } from "luxon";
 import { useTimeTracker, PROMODORO_TEMPLATE } from "./useTimeTracker";
 import { useTitle } from "@vueuse/core";
@@ -10,7 +10,9 @@ export const trackerConfig = {
   onStarted: (data) => {
     console.log("DEBUG::onStarted", data);
   },
-  onStopped: () => {},
+  onStopped: (data) => {
+    console.log("DEBUG::onStopped", data);
+  },
   onTick: () => {},
 };
 
@@ -167,6 +169,7 @@ export const useTimer = (config) => {
     if (state.mode == "promodoro") {
       formData = createTrack(state.track);
     }
+    console.log("there", onStarted);
 
     onStarted && onStarted(formData);
     onTick && onTick(state.track);
