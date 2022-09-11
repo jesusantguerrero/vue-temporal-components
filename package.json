@@ -1,6 +1,6 @@
 {
   "name": "vue-temporal-components",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "main": "dist/vue-temporal-components.es.js",
   "unpkg": "dist/vue-temporal-components.umd.js",
   "scripts": {
