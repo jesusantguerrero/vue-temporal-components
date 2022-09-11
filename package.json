@@ -1,6 +1,6 @@
 {
   "name": "vue-temporal-components",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "main": "dist/vue-temporal-components.es.js",
   "unpkg": "dist/vue-temporal-components.umd.js",
   "scripts": {
@@ -21,7 +21,7 @@
   "exports": {
     ".": {
       "require": "./dist/vue-temporal-components.umd.js",
-      "import": "./dist/vue-temporal-components.es.js"
+      "import": "./dist/vue-temporal-components.mjs"
     },
     "./*": "./*"
   },
