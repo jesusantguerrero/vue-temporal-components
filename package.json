@@ -1,7 +1,7 @@
 {
   "name": "vue-temporal-components",
-  "version": "0.2.5",
-  "main": "dist/vue-temporal-components.es.js",
+  "version": "0.2.6",
+  "main": "dist/vue-temporal-components.mjs",
   "unpkg": "dist/vue-temporal-components.umd.js",
   "scripts": {
     "dev": "vite",
