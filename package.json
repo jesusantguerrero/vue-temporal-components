@@ -29,8 +29,16 @@
     "@vueuse/core": "^9.1.1"
   },
   "dependencies": {
+    "@interactjs/actions": "^1.10.17",
+    "@interactjs/auto-start": "^1.10.17",
+    "@interactjs/dev-tools": "^1.10.17",
+    "@interactjs/interact": "^1.10.17",
+    "@interactjs/modifiers": "^1.10.17",
     "luxon": "^2.3.1",
-    "mitt": "^3.0.0"
+    "mathjs": "^11.2.1",
+    "mitt": "^3.0.0",
+    "rrule": "^2.7.1",
+    "vueuse-temporals": "^1.4.2"
   },
   "devDependencies": {
     "@cypress/vite-dev-server": "^3.1.1",
