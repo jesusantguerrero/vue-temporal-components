@@ -202,8 +202,8 @@ export const useTimer = (config) => {
     if (!silent) {
       playSound();
       if (wasRunning && previousMode == "promodoro") {
-        showNotification("Promodoro session finished");
-        confirmFunction(`Promodoro session ${message}`);
+        showNotification("Pomodoro session finished");
+        confirmFunction && confirmFunction(`Pomodoro session ${message}`);
       }
     }
   };
