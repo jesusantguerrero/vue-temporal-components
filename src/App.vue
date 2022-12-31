@@ -68,6 +68,7 @@ const state = {
     <Timer
       :task="tasks[0]"
       size="mini"
+      move-on-stop
       @started="debugEvent"
       @stopped="debugEvent"
       @tick="debugEvent"

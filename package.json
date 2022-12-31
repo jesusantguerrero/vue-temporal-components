@@ -23,7 +23,8 @@
       "require": "./dist/vue-temporal-components.umd.js",
       "import": "./dist/vue-temporal-components.mjs"
     },
-    "./*": "./*"
+    "./*": "./*",
+    "./timer": "./src/components/Timer/index.vue"
   },
   "peerDependencies": {
     "@vueuse/core": "^9.1.1"

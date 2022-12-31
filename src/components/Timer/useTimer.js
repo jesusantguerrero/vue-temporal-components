@@ -7,6 +7,7 @@ export const trackerConfig = {
   task: {},
   template: PROMODORO_TEMPLATE,
   confirmFunction: confirm,
+  moveOnStop: true,
   onStarted: (data) => {
     console.log("DEBUG::onStarted", data);
   },
@@ -26,8 +27,15 @@ export const mergeConfig = (propsData) => {
 };
 
 export const useTimer = (config) => {
-  const { task, template, confirmFunction, onStarted, onStopped, onTick } =
-    mergeConfig(config);
+  const {
+    task,
+    template,
+    moveOnStop,
+    confirmFunction,
+    onStarted,
+    onStopped,
+    onTick,
+  } = mergeConfig(config);
   // state
   const state = reactive({
     currentStep: 0,
@@ -157,7 +165,7 @@ export const useTimer = (config) => {
 
   // Controls
   const toggleTracker = () => {
-    state.track.started_at ? stop(null, true) : play();
+    state.track.started_at ? stop(moveOnStop, true) : play();
   };
 
   function play() {
@@ -169,7 +177,6 @@ export const useTimer = (config) => {
     if (state.mode == "promodoro") {
       formData = createTrack(state.track);
     }
-    console.log("there", onStarted);
 
     onStarted && onStarted(formData);
     onTick && onTick(state.track);
@@ -179,7 +186,7 @@ export const useTimer = (config) => {
     }, 100);
   }
 
-  const stop = (shouldCallNextMode = true, silent) => {
+  const stop = (shouldCallNextMode = moveOnStop, silent) => {
     state.track.ended_at = new Date();
     let formData = {};
     if (state.mode == "promodoro" && state.now) {
@@ -215,28 +222,34 @@ export const useTimer = (config) => {
     setDurationTarget();
   };
 
-  const prevMode = () => {
+  const moveToStep = (index) => {
     if (state.now) {
       stop(false);
     }
 
-    const nextMode = hasPrevMode.value ? state.currentStep - 1 : 0;
-    state.mode = template[nextMode];
-    state.currentStep = nextMode;
+    state.mode = template[index];
+    state.currentStep = index;
     setDurationTarget();
+  };
+
+  const moveToStage = (index) => {
+    if (state.now) {
+      stop(false);
+    }
+    moveToStep(index);
+  };
+
+  const prevMode = () => {
+    const nextMode = hasPrevMode.value ? state.currentStep - 1 : 0;
+    moveToStep(nextMode);
   };
 
   const nextMode = () => {
-    if (state.now) {
-      stop(false);
-    }
-
     const canIncrement = state.currentStep < template.length - 1;
     const nextMode = canIncrement ? state.currentStep + 1 : 0;
-    state.mode = template[nextMode];
-    state.currentStep = nextMode;
-    setDurationTarget();
+    moveToStep(nextMode);
   };
+
   //  resume
   const resume = (currentTimer) => {
     state.track.uid = currentTimer.uid;
@@ -314,6 +327,7 @@ export const useTimer = (config) => {
       reset,
       prevMode,
       nextMode,
+      moveToStage,
       clearTrack,
       resume,
     },

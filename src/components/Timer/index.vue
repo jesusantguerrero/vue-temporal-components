@@ -47,12 +47,13 @@
             <div
               v-for="(stage, index) in ui.promodoroTotal"
               :title="`Round ${index + 1}: ${stage.name}`"
-              class="w-full h-1 mr-1 cursor-pointer bg-red hover:ring hover:ring-offset-1"
+              class="w-full h-1 mr-1 cursor-pointer bg-red hover:ring hover:ring-offset-[0.2px] ring-gray-300 ring-offset-gray-500"
               :class="[
                 state.currentStep >= stage.originalIndex
                   ? ui.currentStateColor
                   : 'bg-gray-200/50',
               ]"
+              @click.stop="controls.moveToStage(stage.originalIndex)"
               :key="stage.name"
             />
           </div>
@@ -98,6 +99,10 @@ const props = defineProps({
       return PROMODORO_TEMPLATE;
     },
   },
+  moveOnStop: {
+    type: Boolean,
+    default: true,
+  },
 });
 
 const emit = defineEmits(["started", "stopped", "tick"]);
@@ -105,6 +110,7 @@ const emit = defineEmits(["started", "stopped", "tick"]);
 const { state, controls, ui } = useTimer({
   task: props.task,
   template: props.template,
+  moveOnStop: props.moveOnStop,
   onStarted,
   onStopped,
   onTick,
