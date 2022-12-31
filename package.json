@@ -1,6 +1,6 @@
 {
   "name": "vue-temporal-components",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "main": "dist/vue-temporal-components.mjs",
   "unpkg": "dist/vue-temporal-components.umd.js",
   "scripts": {
@@ -13,7 +13,7 @@
     "test:e2e": "cypress open",
     "coverage": "vitest --coverage",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
-    "release": "bumpp --commit --tag --push && npm publish",
+    "release": "npm run build && bumpp --commit --tag --push && npm publish",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
     "docs:serve": "vitepress serve docs"
