@@ -2,6 +2,7 @@ import { reactive } from "vue";
 const SESSION_MINUTES = 25;
 const SHORT_BREAK_MINUTES = 5;
 const LONG_BREAK_MINUTES = 15;
+
 export const PROMODORO_TEMPLATE = [
   "promodoro",
   "rest",
@@ -13,36 +14,38 @@ export const PROMODORO_TEMPLATE = [
   "long",
 ];
 
+export const POMODORO_MODES = {
+  long: {
+    label: "Long Rest",
+    min: LONG_BREAK_MINUTES,
+    sec: 0,
+    color: "text-green-400",
+    colorBg: "bg-green-400",
+    colorBorder: "border-green-400",
+    text: "Long break",
+  },
+  promodoro: {
+    min: SESSION_MINUTES,
+    sec: 0,
+    color: "text-red-400",
+    colorBg: "bg-red-400",
+    colorBorder: "border-red-400",
+    text: "Work session",
+  },
+  rest: {
+    min: SHORT_BREAK_MINUTES,
+    sec: 0,
+    color: "text-blue-400",
+    colorBg: "bg-blue-400",
+    colorBorder: "border-blue-400",
+    text: "Take a short break",
+  }
+}
+
 export function useTimeTracker() {
   const promodoroState = reactive({
     template: PROMODORO_TEMPLATE,
-    modes: {
-      long: {
-        label: "Long Rest",
-        min: LONG_BREAK_MINUTES,
-        sec: 0,
-        color: "text-green-400",
-        colorBg: "bg-green-400",
-        colorBorder: "border-green-400",
-        text: "Long break",
-      },
-      promodoro: {
-        min: SESSION_MINUTES,
-        sec: 0,
-        color: "text-red-400",
-        colorBg: "bg-red-400",
-        colorBorder: "border-red-400",
-        text: "Work session",
-      },
-      rest: {
-        min: SHORT_BREAK_MINUTES,
-        sec: 0,
-        color: "text-blue-400",
-        colorBg: "bg-blue-400",
-        colorBorder: "border-blue-400",
-        text: "Take a short break",
-      },
-    },
+    modes: POMODORO_MODES,
     volume: 100,
     audio: null,
     alarmSound: "alarmwatch",

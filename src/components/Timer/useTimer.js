@@ -1,11 +1,16 @@
 import { computed, onBeforeUnmount, reactive, watch } from "vue";
 import { Duration, Interval, DateTime } from "luxon";
-import { useTimeTracker, PROMODORO_TEMPLATE } from "./useTimeTracker";
+import {
+  useTimeTracker,
+  PROMODORO_TEMPLATE,
+  POMODORO_MODES,
+} from "./useTimeTracker";
 import { useTitle } from "@vueuse/core";
 
 export const trackerConfig = {
   task: {},
   template: PROMODORO_TEMPLATE,
+  modes: POMODORO_MODES,
   confirmFunction: confirm,
   moveOnStop: true,
   onStarted: (data) => {
@@ -22,6 +27,23 @@ export const mergeConfig = (propsData) => {
     if (propsData[key] !== undefined || propsData[key] !== null) {
       config[key] = propsData[key];
     }
+    if (key == "modes") {
+      config[key] = {
+        long: {
+          ...POMODORO_MODES.long,
+          ...(propsData.modes?.long ?? {}),
+        },
+        rest: {
+          ...POMODORO_MODES.rest,
+          ...(propsData.modes?.rest ?? {}),
+        },
+        promodoro: {
+          ...POMODORO_MODES.promodoro,
+          ...(propsData.modes?.promodoro ?? {}),
+        },
+      };
+    }
+
     return config;
   }, trackerConfig);
 };
@@ -31,6 +53,7 @@ export const useTimer = (config) => {
     task,
     template,
     moveOnStop,
+    modes,
     confirmFunction,
     onStarted,
     onStopped,
@@ -44,33 +67,6 @@ export const useTimer = (config) => {
     volume: 100,
     timer: null,
     durationTarget: null,
-    modes: {
-      long: {
-        label: "Long Rest",
-        text: "Long Rest",
-        min: 15,
-        sec: 0,
-        color: "text-green-400",
-        colorBg: "bg-green-400",
-        colorBorder: "border-green-400",
-      },
-      promodoro: {
-        min: 25,
-        sec: 0,
-        color: "text-red-400",
-        colorBg: "bg-red-400",
-        colorBorder: "border-red-400",
-        text: "Pomodoro session",
-      },
-      rest: {
-        min: 5,
-        sec: 0,
-        color: "text-blue-400",
-        colorBg: "bg-blue-400",
-        colorBorder: "border-blue-400",
-        text: "Take a short break",
-      },
-    },
     track: reactive({
       uid: null,
       task_uid: null,
@@ -83,7 +79,7 @@ export const useTimer = (config) => {
   });
 
   // UI
-  const trackerMode = computed(() => state.modes[state.mode]);
+  const trackerMode = computed(() => modes[state.mode]);
   const promodoroTotal = computed(() => {
     return template
       .map((mode, index) => {
@@ -95,7 +91,7 @@ export const useTimer = (config) => {
       .filter((mode) => mode.name.includes("promodoro"));
   });
   const currentStateColor = computed(() => {
-    return state.modes[template[state.currentStep]].colorBg;
+    return modes[template[state.currentStep]].colorBg;
   });
   const hasPrevMode = computed(() => {
     return state.currentStep > 0;
@@ -103,7 +99,7 @@ export const useTimer = (config) => {
 
   // Time manipulation
   const setDurationTarget = () => {
-    const { min, sec } = state.modes[state.mode];
+    const { min, sec } = modes[state.mode];
     state.durationTarget = Duration.fromISO(`PT${min}M${sec}S`);
   };
 
