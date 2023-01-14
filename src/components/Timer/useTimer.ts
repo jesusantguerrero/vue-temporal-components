@@ -226,10 +226,7 @@ export const useTimer = (config: ITimerConfig) => {
     state.now = track.started_at;
     let formData: ITrack | null = null;
 
-    if (state.mode == "promodoro") {
-      setDurationTarget(track.started_at);
-      formData = createTrack();
-    }
+    formData = createTrack();
 
     onStarted && onStarted(formData);
     onTick && onTick(track);
@@ -242,7 +239,7 @@ export const useTimer = (config: ITimerConfig) => {
   const stop = (shouldCallNextMode: boolean = moveOnStop, silent: boolean = false) => {
     track.ended_at = new Date();
     let formData = null;
-    if (state.mode == "promodoro" && state.now) {
+    if (state.now) {
       formData = closeTrack({ ...track });
     }
 
@@ -275,9 +272,21 @@ export const useTimer = (config: ITimerConfig) => {
     setDurationTarget();
   };
 
-  const setTask = (task, shouldAutoPlay) => {
-
-  }
+  //  resume
+  const resume = (currentTimer: Record<string, any>) => {
+    track.uid = currentTimer.uid;
+    track.started_at = currentTimer.started_at;
+    track.task_uid = currentTimer.task_uid;
+    track.description = currentTimer.description;
+    track.target_time = currentTimer.target_time;
+    track.subtype = currentTimer.subtype;
+    track.completed = false;
+    state.durationTarget = Duration.fromISO(currentTimer.target_time);
+    state.timer = setInterval(() => {
+      state.now = new Date();
+    }, 100);
+  };
+  // Template steps controls
 
   const moveToStep = (index: number) => {
     if (state.now) {
@@ -307,21 +316,6 @@ export const useTimer = (config: ITimerConfig) => {
     moveToStep(nextMode);
   };
 
-  //  resume
-  const resume = (currentTimer: Record<string, any>) => {
-    track.uid = currentTimer.uid;
-    track.started_at = currentTimer.started_at;
-    track.task_uid = currentTimer.task_uid;
-    track.description = currentTimer.description;
-    track.target_time = currentTimer.target_time;
-    track.subtype = currentTimer.subtype;
-    track.completed = false;
-    state.durationTarget = Duration.fromISO(currentTimer.target_time);
-    state.timer = setInterval(() => {
-      state.now = new Date();
-    }, 100);
-  };
-
   // data management / persistence
   const clearTrack = () => {
     clearInterval(state.timer);
@@ -336,7 +330,6 @@ export const useTimer = (config: ITimerConfig) => {
     track.description = task.title;
     track.target_time = state.durationTarget.toISO();
     const formData = cloneDeep(track);
-    delete formData.currentTime;
     return formData;
   };
 
@@ -348,7 +341,7 @@ export const useTimer = (config: ITimerConfig) => {
     ).toDuration();
     formData.duration_ms = duration.as("milliseconds");
     formData.duration_iso = duration.toISO();
-    delete formData.currentTime;
+    formData.currentTime;
     return formData;
   };
 

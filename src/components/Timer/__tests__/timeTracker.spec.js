@@ -97,4 +97,37 @@ describe("Timer component zen use cases", () => {
       duration_iso: "PT1S",
     });
   });
+
+  it("should have currentTime prop in started event", async () => {
+    vi.useFakeTimers();
+    const { emitted } = render(Timer, {
+      props: {
+        task: tasks[0],
+      },
+    });
+    const btnPlay = screen.queryByTestId("btn-play");
+
+    await fireEvent.click(btnPlay);
+    const trackData = emitted("started")[0][0];
+
+    expect(trackData).toHaveProperty("currentTime");
+  });
+
+  it("should have currentTime prop in stoped event", async () => {
+    vi.useFakeTimers();
+    const { emitted } = render(Timer, {
+      props: {
+        task: tasks[0],
+      },
+    });
+    const btnPlay = screen.queryByTestId("btn-play");
+
+    await fireEvent.click(btnPlay);
+
+    vi.advanceTimersByTime(1000);
+    await fireEvent.click(btnPlay);
+    const trackData = emitted("stopped")[0][0];
+
+    expect(trackData).toHaveProperty("currentTime");
+  });
 });
