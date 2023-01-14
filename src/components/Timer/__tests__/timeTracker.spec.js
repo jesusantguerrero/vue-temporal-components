@@ -1,8 +1,9 @@
 import { describe, it, expect, vi } from "vitest";
-import { Timer } from "../../components";
 import { render, fireEvent, screen } from "@testing-library/vue";
-import { tasks } from "../utils";
 import "@testing-library/jest-dom";
+
+import { tasks } from "@/__tests__/utils";
+import Timer from "../index.vue";
 
 describe("Timer component zen use cases", () => {
   it("should be disabled", async () => {

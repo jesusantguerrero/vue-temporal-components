@@ -1,8 +1,8 @@
 import { shallowMount } from "@vue/test-utils";
 import { describe, it, expect } from "vitest";
-import { RoadmapView } from "../../components";
 import { render, screen, fireEvent } from "@testing-library/vue";
-import { tasks } from "../utils";
+import { RoadmapView } from "../..";
+import { tasks } from "@/__tests__/utils";
 
 describe("Roadmap View", () => {
   it("renders props.tasks when passed", () => {

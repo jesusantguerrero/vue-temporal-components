@@ -1,8 +1,9 @@
 import "@testing-library/jest-dom";
-import { useTimer } from "../../components/Timer/useTimer";
 import { vi, describe, it, expect } from "vitest";
-import { PROMODORO_TEMPLATE } from "../../components/Timer/useTimeTracker";
-import { tasks } from "../utils";
+
+import { tasks } from "@/__tests__/utils";
+import { useTimer } from "../useTimer";
+import { PROMODORO_TEMPLATE } from "../useTimeTracker";
 
 describe("useTimer", () => {
   const setTimer = (props = {}) => {
