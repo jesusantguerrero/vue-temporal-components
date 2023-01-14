@@ -70,39 +70,31 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed, onBeforeUnmount, onUnmounted, watch } from "vue";
 import { useTimer } from "./useTimer";
-import { PROMODORO_TEMPLATE } from "./useTimeTracker";
+import { POMODORO_MODES, PROMODORO_TEMPLATE } from "./useTimeTracker";
 import IconSharpPlayArrow from "../atoms/IconSharpPlayArrow.vue";
 import IconSharpPause from "../atoms/IconSharpPause.vue";
 import IconSharpChevronRight from "../atoms/IconSharpChevronRight.vue";
 import IconSharpChevronLeft from "../atoms/IconSharpChevronLeft.vue";
 import Button from "./Button.vue";
-import { useTitle } from "@vueuse/core";
+import clone from "lodash/clone"
 
-const props = defineProps({
-  task: {
-    type: Object,
-  },
-  timer: {
-    type: Object,
-  },
-  size: {},
-  disabled: {
-    type: Boolean,
-    default: false,
-  },
-  template: {
-    type: Array,
-    default() {
-      return PROMODORO_TEMPLATE;
-    },
-  },
-  moveOnStop: {
-    type: Boolean,
-    default: true,
-  },
+interface Props {
+  task: ITaskPartial;
+  timer: any;
+  size?: 'mini'|'normal',
+  disabled: Boolean;
+  template?: string[];
+  modes?: ITimerModes;
+  moveOnStop: boolean
+}
+const props = withDefaults(defineProps<Props>(),{
+  size: 'normal',
+  template: clone(PROMODORO_TEMPLATE),
+  modes: clone(POMODORO_MODES),
+  moveOnStop: true,
 });
 
 const emit = defineEmits(["started", "stopped", "tick"]);
@@ -151,20 +143,21 @@ watch(
 );
 
 onUnmounted(() => {
-  clearInterval(state.timer);
+  if (state.timer) {
+    clearInterval(state.timer);
+  }
 });
 
 // checks to stop
 onBeforeUnmount(() => {
-  useTitle("Zen.");
-  stop(false, true);
+  controls.stop(false, true);
 });
 
 watch(
   () => props.task.title,
   (newValue, oldValue) => {
     if (oldValue && state.now && state.mode == "pomodoro") {
-      stop(false, true);
+      controls.stop(false, true);
     }
   }
 );

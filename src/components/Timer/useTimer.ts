@@ -1,4 +1,6 @@
+//@ts-ignore 
 import { computed, onBeforeUnmount, reactive, watch } from "vue";
+//@ts-ignore 
 import { Duration, Interval, DateTime } from "luxon";
 import {
   useTimeTracker,
@@ -6,28 +8,81 @@ import {
   POMODORO_MODES,
 } from "./useTimeTracker";
 import { addMinutes, addSeconds, format } from "date-fns";
-import { cloneDeep } from "lodash";
+import cloneDeep from "lodash/cloneDeep";
+
+export interface ITaskPartial {
+  uid: string;
+  title: string;
+}
+
+export interface ITimerMode {
+  label?: string;
+  min: number;
+  sec: number;
+  color: string;
+  colorBg: string;
+  colorBorder: string;
+  text: string
+}
+
+export type ITimerModes = Record<string, ITimerMode>
+interface ITrack {
+  uid?: null | string | number;
+  task_uid: null | string | number;
+  started_at: null | Date;
+  ended_at: null | Date;
+  expected_end_at: null | Date | string;
+  type: 'pomodoro' | 'timer' | 'stopwatch';
+  description?: string;
+  subtype?: string;
+  target_time: null | string;
+  duration_ms: number;
+  duration_iso: string; 
+  completed: boolean;
+  currentTime: null | Duration;
+}
+
+interface ITimerState {
+  templateStep: number;
+  now: null | Date;
+  mode: string;
+  volume: number;
+  timer: null | number | any;
+  durationTarget: null | Duration;
+}
+export interface ITimerConfig  {
+    task: ITaskPartial,
+    template: string[],
+    modes: ITimerModes,
+    moveOnStop: boolean,
+    confirmFunction: (data: any) => {},
+    onStarted: (data: ITrack | null) => {},
+    onStopped: (data: ITrack | null) => {},
+    onTick: (data: ITrack | null) => {},
+}
 
 export const trackerConfig = {
   task: {},
   template: PROMODORO_TEMPLATE,
   modes: POMODORO_MODES,
-  confirmFunction: confirm,
   moveOnStop: true,
-  onStarted: (data) => {
+  confirmFunction: confirm,
+  onStarted: (data: ITrack | null) => {
     console.log("DEBUG::onStarted", data);
   },
-  onStopped: (data) => {
+  onStopped: (data: ITrack | null) => {
     console.log("DEBUG::onStopped", data);
   },
   onTick: () => {},
 };
 
-export const mergeConfig = (propsData) => {
+export const mergeConfig = (propsData: Record<string, any>): ITimerConfig => {
   return Object.keys(trackerConfig).reduce((config, key) => {
     if (propsData[key] !== undefined || propsData[key] !== null) {
+      // @ts-ignore
       config[key] = propsData[key];
     }
+
     if (key == "modes") {
       config[key] = {
         long: {
@@ -46,10 +101,10 @@ export const mergeConfig = (propsData) => {
     }
 
     return config;
-  }, trackerConfig);
+  }, trackerConfig) as unknown as ITimerConfig;
 };
 
-export const useTimer = (config) => {
+export const useTimer = (config: ITimerConfig) => {
   const {
     task,
     template,
@@ -61,8 +116,8 @@ export const useTimer = (config) => {
     onTick,
   } = mergeConfig(config);
   // state
-  const state = reactive({
-    currentStep: 0,
+  const state = reactive<ITimerState>({
+    templateStep: 0,
     now: null,
     mode: "promodoro",
     volume: 100,
@@ -70,15 +125,18 @@ export const useTimer = (config) => {
     durationTarget: null,
   });
 
-  const track = reactive({
+  const track = reactive<ITrack>({
     uid: null,
     task_uid: null,
     started_at: null,
     ended_at: null,
+    expected_end_at: null,
     type: "pomodoro",
     target_time: null,
-    expected_end_at: null,
+    duration_ms: 0,
+    duration_iso: '', 
     completed: false,
+    currentTime: null,
   });
 
   // UI
@@ -93,15 +151,16 @@ export const useTimer = (config) => {
       })
       .filter((mode) => mode.name.includes("promodoro"));
   });
+
   const currentStateColor = computed(() => {
-    return modes[template[state.currentStep]].colorBg;
+    return modes[template[state.templateStep]].colorBg;
   });
   const hasPrevMode = computed(() => {
-    return state.currentStep > 0;
+    return state.templateStep > 0;
   });
 
   // Time manipulation
-  const setDurationTarget = (startedAt) => {
+  const setDurationTarget = (startedAt: Date = new Date()) => {
     const { min, sec } = modes[state.mode];
     state.durationTarget = Duration.fromISO(`PT${min}M${sec}S`);
     if (startedAt) {
@@ -164,11 +223,11 @@ export const useTimer = (config) => {
     stopSound();
     track.started_at = new Date();
     state.now = track.started_at;
-    let formData = {};
+    let formData: ITrack | null = null;
 
     if (state.mode == "promodoro") {
       setDurationTarget(track.started_at);
-      formData = createTrack(track);
+      formData = createTrack();
     }
 
     onStarted && onStarted(formData);
@@ -179,9 +238,9 @@ export const useTimer = (config) => {
     }, 100);
   }
 
-  const stop = (shouldCallNextMode = moveOnStop, silent) => {
+  const stop = (shouldCallNextMode: boolean = moveOnStop, silent: boolean = false) => {
     track.ended_at = new Date();
-    let formData = {};
+    let formData = null;
     if (state.mode == "promodoro" && state.now) {
       formData = closeTrack({ ...track });
     }
@@ -211,21 +270,21 @@ export const useTimer = (config) => {
   const reset = () => {
     stop();
     state.mode = "promodoro";
-    state.currentStep = 0;
+    state.templateStep = 0;
     setDurationTarget();
   };
 
-  const moveToStep = (index) => {
+  const moveToStep = (index: number) => {
     if (state.now) {
       stop(false);
     }
 
     state.mode = template[index];
-    state.currentStep = index;
+    state.templateStep = index;
     setDurationTarget();
   };
 
-  const moveToStage = (index) => {
+  const moveToStage = (index: number) => {
     if (state.now) {
       stop(false);
     }
@@ -233,18 +292,18 @@ export const useTimer = (config) => {
   };
 
   const prevMode = () => {
-    const nextMode = hasPrevMode.value ? state.currentStep - 1 : 0;
+    const nextMode = hasPrevMode.value ? state.templateStep - 1 : 0;
     moveToStep(nextMode);
   };
 
   const nextMode = () => {
-    const canIncrement = state.currentStep < template.length - 1;
-    const nextMode = canIncrement ? state.currentStep + 1 : 0;
+    const canIncrement = state.templateStep < template.length - 1;
+    const nextMode = canIncrement ? state.templateStep + 1 : 0;
     moveToStep(nextMode);
   };
 
   //  resume
-  const resume = (currentTimer) => {
+  const resume = (currentTimer: Record<string, any>) => {
     track.uid = currentTimer.uid;
     track.started_at = currentTimer.started_at;
     track.task_uid = currentTimer.task_uid;
@@ -276,7 +335,7 @@ export const useTimer = (config) => {
     return formData;
   };
 
-  const closeTrack = (track) => {
+  const closeTrack = (track: ITrack): ITrack => {
     const formData = cloneDeep(track);
     const duration = Interval.fromDateTimes(
       formData.started_at,
