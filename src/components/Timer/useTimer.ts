@@ -155,6 +155,7 @@ export const useTimer = (config: ITimerConfig) => {
   const currentStateColor = computed(() => {
     return modes[template[state.templateStep]].colorBg;
   });
+  
   const hasPrevMode = computed(() => {
     return state.templateStep > 0;
   });
@@ -273,6 +274,10 @@ export const useTimer = (config: ITimerConfig) => {
     state.templateStep = 0;
     setDurationTarget();
   };
+
+  const setTask = (task, shouldAutoPlay) => {
+
+  }
 
   const moveToStep = (index: number) => {
     if (state.now) {

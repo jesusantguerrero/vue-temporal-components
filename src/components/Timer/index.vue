@@ -161,4 +161,6 @@ watch(
     }
   }
 );
+
+defineExpose(controls)
 </script>
