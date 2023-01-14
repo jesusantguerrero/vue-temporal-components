@@ -35,6 +35,7 @@
     "@interactjs/dev-tools": "^1.10.17",
     "@interactjs/interact": "^1.10.17",
     "@interactjs/modifiers": "^1.10.17",
+    "lodash": "^4.17.21",
     "luxon": "^3.2.1",
     "mathjs": "^11.5.0",
     "mitt": "^3.0.0",

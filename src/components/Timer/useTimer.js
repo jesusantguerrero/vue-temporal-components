@@ -5,7 +5,8 @@ import {
   PROMODORO_TEMPLATE,
   POMODORO_MODES,
 } from "./useTimeTracker";
-import { useTitle } from "@vueuse/core";
+import { addMinutes, addSeconds, format } from "date-fns";
+import { cloneDeep } from "lodash";
 
 export const trackerConfig = {
   task: {},
@@ -67,15 +68,17 @@ export const useTimer = (config) => {
     volume: 100,
     timer: null,
     durationTarget: null,
-    track: reactive({
-      uid: null,
-      task_uid: null,
-      started_at: null,
-      ended_at: null,
-      type: "pomodoro",
-      target_time: null,
-      completed: false,
-    }),
+  });
+
+  const track = reactive({
+    uid: null,
+    task_uid: null,
+    started_at: null,
+    ended_at: null,
+    type: "pomodoro",
+    target_time: null,
+    expected_end_at: null,
+    completed: false,
   });
 
   // UI
@@ -98,16 +101,20 @@ export const useTimer = (config) => {
   });
 
   // Time manipulation
-  const setDurationTarget = () => {
+  const setDurationTarget = (startedAt) => {
     const { min, sec } = modes[state.mode];
     state.durationTarget = Duration.fromISO(`PT${min}M${sec}S`);
+    if (startedAt) {
+      const expectedEndAt = addSeconds(addMinutes(startedAt, min), sec);
+      track.expected_end_at = format(expectedEndAt, "yyyy-MM-dd'T'HH:mm:ss");
+    }
   };
 
   setDurationTarget();
 
   const targetTime = computed(() => {
-    if (state.track.started_at && state.now) {
-      const targetTime = DateTime.fromJSDate(state.track.started_at).plus(
+    if (track.started_at && state.now) {
+      const targetTime = DateTime.fromJSDate(track.started_at).plus(
         state.durationTarget
       );
       return targetTime;
@@ -116,13 +123,13 @@ export const useTimer = (config) => {
   });
 
   const currentTime = computed(() => {
-    if (state.track.started_at && state.now && state.durationTarget) {
+    if (track.started_at && state.now && state.durationTarget) {
       let duration = Interval.fromDateTimes(
-        state.track.started_at,
+        track.started_at,
         state.now
       ).toDuration();
       // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-      state.track.currentTime = duration;
+      track.currentTime = duration;
       if (duration && state.durationTarget) {
         duration = state.durationTarget.minus(duration).plus({ seconds: 0.9 });
         return duration.as("seconds") < 0
@@ -136,21 +143,10 @@ export const useTimer = (config) => {
   });
 
   watch(
-    () => currentTime.value,
-    () => {
-      if (state.now) {
-        useTitle(`Zen.  ${currentTime.value}`);
-      } else {
-        useTitle("Zen.");
-      }
-    }
-  );
-
-  watch(
     () => state.now,
     (now) => {
       if (targetTime.value && now && targetTime.value.diffNow() < 0) {
-        state.track.completed = true;
+        track.completed = true;
         stop();
       }
     }
@@ -161,37 +157,38 @@ export const useTimer = (config) => {
 
   // Controls
   const toggleTracker = () => {
-    state.track.started_at ? stop(moveOnStop, true) : play();
+    track.started_at ? stop(moveOnStop, true) : play();
   };
 
   function play() {
     stopSound();
-    state.track.started_at = new Date();
-    state.now = state.track.started_at;
+    track.started_at = new Date();
+    state.now = track.started_at;
     let formData = {};
 
     if (state.mode == "promodoro") {
-      formData = createTrack(state.track);
+      setDurationTarget(track.started_at);
+      formData = createTrack(track);
     }
 
     onStarted && onStarted(formData);
-    onTick && onTick(state.track);
+    onTick && onTick(track);
     state.timer = setInterval(() => {
       state.now = new Date();
-      onTick && onTick(state.track);
+      onTick && onTick(track);
     }, 100);
   }
 
   const stop = (shouldCallNextMode = moveOnStop, silent) => {
-    state.track.ended_at = new Date();
+    track.ended_at = new Date();
     let formData = {};
     if (state.mode == "promodoro" && state.now) {
-      formData = closeTrack({ ...state.track });
+      formData = closeTrack({ ...track });
     }
 
     const wasRunning = Boolean(state.now);
     const previousMode = state.mode;
-    const message = state.track.completed ? "finished" : "stopped";
+    const message = track.completed ? "finished" : "stopped";
 
     clearTrack();
     clearInterval(state.timer);
@@ -248,13 +245,13 @@ export const useTimer = (config) => {
 
   //  resume
   const resume = (currentTimer) => {
-    state.track.uid = currentTimer.uid;
-    state.track.started_at = currentTimer.started_at;
-    state.track.task_uid = currentTimer.task_uid;
-    state.track.description = currentTimer.description;
-    state.track.target_time = currentTimer.target_time;
-    state.track.subtype = currentTimer.subtype;
-    state.track.completed = false;
+    track.uid = currentTimer.uid;
+    track.started_at = currentTimer.started_at;
+    track.task_uid = currentTimer.task_uid;
+    track.description = currentTimer.description;
+    track.target_time = currentTimer.target_time;
+    track.subtype = currentTimer.subtype;
+    track.completed = false;
     state.durationTarget = Duration.fromISO(currentTimer.target_time);
     state.timer = setInterval(() => {
       state.now = new Date();
@@ -264,23 +261,23 @@ export const useTimer = (config) => {
   // data management / persistence
   const clearTrack = () => {
     clearInterval(state.timer);
-    state.track.started_at = null;
-    state.track.ended_at = null;
-    state.track.target_time = null;
-    state.track.completed = false;
+    track.started_at = null;
+    track.ended_at = null;
+    track.target_time = null;
+    track.completed = false;
   };
 
   const createTrack = () => {
-    state.track.task_uid = task.uid;
-    state.track.description = task.title;
-    state.track.target_time = state.durationTarget.toISO();
-    const formData = { ...state.track };
+    track.task_uid = task.uid;
+    track.description = task.title;
+    track.target_time = state.durationTarget.toISO();
+    const formData = cloneDeep(track);
     delete formData.currentTime;
     return formData;
   };
 
   const closeTrack = (track) => {
-    const formData = { ...track };
+    const formData = cloneDeep(track);
     const duration = Interval.fromDateTimes(
       formData.started_at,
       formData.ended_at
@@ -293,7 +290,6 @@ export const useTimer = (config) => {
 
   // checks to stop
   onBeforeUnmount(() => {
-    useTitle("Zen.");
     stop(false, true);
   });
 
