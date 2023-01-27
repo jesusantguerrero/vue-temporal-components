@@ -1,4 +1,4 @@
-import cloneDeep  from 'lodash/cloneDeep';
+import { cloneDeep }  from 'lodash-es';
 import { ITimerModes } from './useTimer';
 // @ts-ignore: it should export reactive for sure
 import { reactive } from "vue";

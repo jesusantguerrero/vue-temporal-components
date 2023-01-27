@@ -79,7 +79,7 @@ import IconSharpPause from "../atoms/IconSharpPause.vue";
 import IconSharpChevronRight from "../atoms/IconSharpChevronRight.vue";
 import IconSharpChevronLeft from "../atoms/IconSharpChevronLeft.vue";
 import Button from "./Button.vue";
-import clone from "lodash/clone"
+import { clone } from "lodash-es"
 
 interface Props {
   task: ITaskPartial;

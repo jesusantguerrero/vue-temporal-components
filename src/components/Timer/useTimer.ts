@@ -8,7 +8,7 @@ import {
   POMODORO_MODES,
 } from "./useTimeTracker";
 import { addMinutes, addSeconds, format } from "date-fns";
-import cloneDeep from "lodash/cloneDeep";
+import { cloneDeep } from "lodash-es";
 
 export interface ITaskPartial {
   uid: string;
