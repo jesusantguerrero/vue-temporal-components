@@ -1,6 +1,6 @@
 {
   "name": "vue-temporal-components",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "main": "dist/vue-temporal-components.mjs",
   "unpkg": "dist/vue-temporal-components.umd.js",
   "scripts": {
@@ -36,12 +36,13 @@
     "@interactjs/dev-tools": "^1.10.17",
     "@interactjs/interact": "^1.10.17",
     "@interactjs/modifiers": "^1.10.17",
-    "lodash": "^4.17.21",
+    "@types/lodash-es": "^4.17.6",
+    "lodash-es": "^4.17.21",
     "luxon": "^3.2.1",
     "mathjs": "^11.5.0",
     "mitt": "^3.0.0",
     "rrule": "^2.7.1",
-    "vueuse-temporals": "^1.4.2"
+    "vueuse-temporals": "^1.4.3"
   },
   "devDependencies": {
     "@cypress/vite-dev-server": "^5.0.2",
@@ -50,7 +51,6 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/user-event": "^14.4.3",
     "@testing-library/vue": "^6.6.1",
-    "@types/lodash": "^4.14.191",
     "@vitejs/plugin-vue": "^4.0.0",
     "@vitejs/plugin-vue-jsx": "^3.0.0",
     "@vitest/coverage-c8": "^0.27.1",
