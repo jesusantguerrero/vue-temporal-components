@@ -132,16 +132,6 @@ function onTick(track) {
   emit("tick", track);
 }
 
-watch(
-  () => props.timer,
-  (timer) => {
-    if (timer && timer.uid !== state.timer) {
-      timer?.started_at && controls.resume(timer);
-    }
-  },
-  { immediate: true }
-);
-
 onUnmounted(() => {
   if (state.timer) {
     clearInterval(state.timer);
