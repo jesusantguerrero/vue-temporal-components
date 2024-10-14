@@ -1,15 +1,17 @@
 <template>
   <div
-    class="relative w-full weekline"
+    class="relative w-full overflow-auto weekline"
     :class="{ 'pl-16': time }"
-    ref="weekline"
+    ref="weekLine"
   >
     <Controls
       v-model="state.selectedDay"
       v-model:week="state.week"
       v-bind="args"
       :visible-week-days="visibleWeekDays"
-      class="absolute top-0 left-0 z-30 w-full bg-white border-b week__header"
+      class="absolute top-0 left-0 z-30 w-full border-b week__header"
+      ref="weekHeader"
+      :class="headerClass"
     />
     <div class="pt-16">
       <div class="relative flex w-full">
@@ -19,6 +21,7 @@
           :key="day"
           :day="day"
           :items="visibleItems"
+          :cell-class="cellClass"
           @create="onCreate"
           @update:soft="$emit('update:soft', $event)"
           @update="$emit('update', $event)"
@@ -89,6 +92,14 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
+  showTimeInCells: {
+    type: Boolean,
+    default: false,
+  },
+  specialHours: {
+    type: Object,
+    default: () => ({}),
+  },
   allowCreate: {
     type: Boolean,
     default: true,
@@ -97,6 +108,18 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
+  cellClass: {
+    type: String,
+    default: true,
+  },
+  headerClass: {
+    type: String,
+    default: true,
+  }, 
+  hideWeekends: {
+    type: Boolean,
+    default: false,
+  }
 });
 
 provide("options", props);
@@ -152,21 +175,19 @@ watch(
   }
 );
 
-const weekline = ref(null);
+const weekLine = ref(null);
+const weekHeader = ref(null);
 const setStickyHeaders = () => {
   requestAnimationFrame(() => {
     if (weekLineTop.value >= 40) {
-      const header = document.querySelector(".week__header");
-      header.style.transform = `translate3d(0px, ${weekLineTop.value}px, 1px)`;
+      weekHeader.value.style.transform = `translate3d(0px, ${weekLineTop.value}px, 1px)`;
     } else {
-      const header = document.querySelector(".week__header");
-      header.style.transform = ``;
+  
+      weekHeader.value.style.transform = ``;
     }
   });
 };
-const { y: weekLineTop } = useScroll(weekline, {
-  onScroll: setStickyHeaders,
-});
+
 
 const visibleWeekDays = computed(() => {
   return props.hideWeekends && state.week
@@ -182,6 +203,7 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
+
 .weekline {
   &::-webkit-scrollbar-thumb {
     background-color: transparentize($color: #000000, $amount: 0.7);

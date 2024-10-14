@@ -2,8 +2,6 @@
 import { reactive } from "vue";
 import { RoadmapView } from "./components";
 import addDays from "date-fns/addDays";
-import Timer from "./components/Timer/index.vue";
-import WeekPlanner from "./components/WeekPlanner/WeekPlanner.vue";
 import { addHours } from "date-fns";
 
 const tasks = reactive([
@@ -63,17 +61,5 @@ const state = {
       focused-text-class="text-green-500"
       marker-bg-class="bg-green-400"
     />
-    <Timer :task="tasks[0]" />
-
-    <Timer
-      :task="tasks[0]"
-      size="mini"
-      move-on-stop
-      @started="debugEvent"
-      @stopped="debugEvent"
-      @tick="debugEvent"
-    />
-
-    <week-planner v-model="value" v-bind="state" />
   </div>
 </template>

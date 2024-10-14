@@ -1,0 +1,173 @@
+{
+  "hash": "3832a233",
+  "browserHash": "c2e64504",
+  "optimized": {
+    "vue": {
+      "src": "../../../../node_modules/vue/dist/vue.runtime.esm-bundler.js",
+      "file": "vue.js",
+      "fileHash": "e6d259e2",
+      "needsInterop": false
+    },
+    "vitepress > @vue/devtools-api": {
+      "src": "../../../../node_modules/@vue/devtools-api/lib/esm/index.js",
+      "file": "vitepress___@vue_devtools-api.js",
+      "fileHash": "ba4b8679",
+      "needsInterop": false
+    },
+    "lodash-es": {
+      "src": "../../../../node_modules/lodash-es/lodash.js",
+      "file": "lodash-es.js",
+      "fileHash": "5b6a6917",
+      "needsInterop": false
+    },
+    "luxon": {
+      "src": "../../../../node_modules/luxon/src/luxon.js",
+      "file": "luxon.js",
+      "fileHash": "6a4352a0",
+      "needsInterop": false
+    },
+    "date-fns": {
+      "src": "../../../../node_modules/date-fns/esm/index.js",
+      "file": "date-fns.js",
+      "fileHash": "45d9a326",
+      "needsInterop": false
+    },
+    "@vueuse/core": {
+      "src": "../../../../node_modules/@vueuse/core/index.mjs",
+      "file": "@vueuse_core.js",
+      "fileHash": "5edc4ee6",
+      "needsInterop": false
+    },
+    "rrule": {
+      "src": "../../../../node_modules/rrule/dist/esm/index.js",
+      "file": "rrule.js",
+      "fileHash": "aae04fa2",
+      "needsInterop": false
+    },
+    "vueuse-temporals": {
+      "src": "../../../../node_modules/vueuse-temporals/dist/index.mjs",
+      "file": "vueuse-temporals.js",
+      "fileHash": "e2018bd4",
+      "needsInterop": false
+    },
+    "@interactjs/auto-start": {
+      "src": "../../../../node_modules/@interactjs/auto-start/index.js",
+      "file": "@interactjs_auto-start.js",
+      "fileHash": "2f4c5c56",
+      "needsInterop": false
+    },
+    "@interactjs/actions/drag": {
+      "src": "../../../../node_modules/@interactjs/actions/drag/index.js",
+      "file": "@interactjs_actions_drag.js",
+      "fileHash": "d3aa0d73",
+      "needsInterop": false
+    },
+    "@interactjs/actions/resize": {
+      "src": "../../../../node_modules/@interactjs/actions/resize/index.js",
+      "file": "@interactjs_actions_resize.js",
+      "fileHash": "ef75b888",
+      "needsInterop": false
+    },
+    "@interactjs/modifiers": {
+      "src": "../../../../node_modules/@interactjs/modifiers/index.js",
+      "file": "@interactjs_modifiers.js",
+      "fileHash": "27307421",
+      "needsInterop": false
+    },
+    "@interactjs/dev-tools": {
+      "src": "../../../../node_modules/@interactjs/dev-tools/index.js",
+      "file": "@interactjs_dev-tools.js",
+      "fileHash": "4a0c65f1",
+      "needsInterop": false
+    },
+    "@interactjs/interact": {
+      "src": "../../../../node_modules/@interactjs/interact/index.js",
+      "file": "@interactjs_interact.js",
+      "fileHash": "7783ef5a",
+      "needsInterop": false
+    },
+    "mathjs": {
+      "src": "../../../../node_modules/mathjs/lib/esm/index.js",
+      "file": "mathjs.js",
+      "fileHash": "ae1e3a01",
+      "needsInterop": false
+    },
+    "date-fns/addDays": {
+      "src": "../../../../node_modules/date-fns/esm/addDays/index.js",
+      "file": "date-fns_addDays.js",
+      "fileHash": "d4371ebc",
+      "needsInterop": false
+    },
+    "date-fns/format": {
+      "src": "../../../../node_modules/date-fns/esm/format/index.js",
+      "file": "date-fns_format.js",
+      "fileHash": "74fab337",
+      "needsInterop": false
+    },
+    "date-fns/eachDayOfInterval": {
+      "src": "../../../../node_modules/date-fns/esm/eachDayOfInterval/index.js",
+      "file": "date-fns_eachDayOfInterval.js",
+      "fileHash": "0a912bc2",
+      "needsInterop": false
+    },
+    "date-fns/endOfMonth": {
+      "src": "../../../../node_modules/date-fns/esm/endOfMonth/index.js",
+      "file": "date-fns_endOfMonth.js",
+      "fileHash": "ba00fc96",
+      "needsInterop": false
+    },
+    "date-fns/fp/isSameDay": {
+      "src": "../../../../node_modules/date-fns/esm/fp/isSameDay/index.js",
+      "file": "date-fns_fp_isSameDay.js",
+      "fileHash": "37e6f90b",
+      "needsInterop": false
+    },
+    "date-fns/isWeekend": {
+      "src": "../../../../node_modules/date-fns/esm/isWeekend/index.js",
+      "file": "date-fns_isWeekend.js",
+      "fileHash": "b97e3956",
+      "needsInterop": false
+    }
+  },
+  "chunks": {
+    "chunk-G57B2UST": {
+      "file": "chunk-G57B2UST.js"
+    },
+    "chunk-WSSNYPTA": {
+      "file": "chunk-WSSNYPTA.js"
+    },
+    "chunk-NZVBT32X": {
+      "file": "chunk-NZVBT32X.js"
+    },
+    "chunk-L7443FSL": {
+      "file": "chunk-L7443FSL.js"
+    },
+    "chunk-3YKCWWWF": {
+      "file": "chunk-3YKCWWWF.js"
+    },
+    "chunk-FYVSSNL4": {
+      "file": "chunk-FYVSSNL4.js"
+    },
+    "chunk-VPTY6SEF": {
+      "file": "chunk-VPTY6SEF.js"
+    },
+    "chunk-5QDQCSGN": {
+      "file": "chunk-5QDQCSGN.js"
+    },
+    "chunk-PDNDNDGQ": {
+      "file": "chunk-PDNDNDGQ.js"
+    },
+    "chunk-6PU2QWP6": {
+      "file": "chunk-6PU2QWP6.js"
+    },
+    "chunk-FNTODMS7": {
+      "file": "chunk-FNTODMS7.js"
+    },
+    "chunk-YW53L7UT": {
+      "file": "chunk-YW53L7UT.js"
+    },
+    "chunk-ZC22LKFR": {
+      "file": "chunk-ZC22LKFR.js"
+    }
+  }
+}

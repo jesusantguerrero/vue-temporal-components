@@ -1,10 +1,8 @@
 module.exports = {
   content: [
-    "./public/**/*.html",
-    "./src/**/*.vue",
-    "./src/**/*.ts",
-    "./src/**/*.js",
-  ],
+    "./public/**/*.html", 
+    "./docs/**/*.md", 
+    "./src/**/*.{vue,md,ts,js}"],
   theme: {
     extend: {},
   },
