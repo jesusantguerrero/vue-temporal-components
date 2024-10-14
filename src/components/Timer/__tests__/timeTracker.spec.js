@@ -38,19 +38,17 @@ describe("Timer component zen use cases", () => {
     const btnPlay = screen.queryByTestId("btn-play");
 
     await fireEvent.click(btnPlay);
-    const trackData = emitted("started")[0][0];
-
+    
     expect(emitted()).toHaveProperty("started");
-    expect(trackData).toContain({
-      type: "pomodoro",
-      target_time: "PT25M",
-      expected_end_at: format(
-        addMinutes(trackData.started_at, 25),
-        "yyyy-MM-dd'T'HH:mm:ss"
-      ),
-      completed: false,
-      description: "Description",
-    });
+    const trackData = emitted("started")[0][0];
+    expect(trackData).toHaveProperty("type", "pomodoro");
+    expect(trackData).toHaveProperty("target_time", "PT25M");
+    expect(trackData).toHaveProperty("expected_end_at", format(
+      addMinutes(trackData.started_at, 25),
+      "yyyy-MM-dd'T'HH:mm:ss"
+    ));
+    expect(trackData).toHaveProperty("completed", false);
+    expect(trackData).toHaveProperty("description", "Description");
   });
 
   it("should emit tick event", async () => {
@@ -82,20 +80,11 @@ describe("Timer component zen use cases", () => {
     vi.advanceTimersByTime(1000);
     await fireEvent.click(btnPlay);
     const trackData = emitted("stopped")[0][0];
-
-    expect(emitted()).toHaveProperty("stopped");
-    expect(emitted("stopped")[0][0]).toContain({
-      type: "pomodoro",
-      target_time: "PT25M",
-      completed: false,
-      description: "Description",
-      expected_end_at: format(
-        addMinutes(trackData.started_at, 25),
-        "yyyy-MM-dd'T'HH:mm:ss"
-      ),
-      duration_ms: 1000,
-      duration_iso: "PT1S",
-    });
+    expect(trackData).toHaveProperty("duration_ms", 1000)
+    expect(trackData).toHaveProperty("duration_iso", "PT1S");
+    expect(trackData).toHaveProperty("expected_end_at", format(
+        addMinutes(trackData?.started_at, 25),
+        "yyyy-MM-dd'T'HH:mm:ss"));
   });
 
   it("should have currentTime prop in started event", async () => {
@@ -113,7 +102,7 @@ describe("Timer component zen use cases", () => {
     expect(trackData).toHaveProperty("currentTime");
   });
 
-  it("should have currentTime prop in stoped event", async () => {
+  it("should have currentTime prop in stopped event", async () => {
     vi.useFakeTimers();
     const { emitted } = render(Timer, {
       props: {

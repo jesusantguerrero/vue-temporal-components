@@ -109,7 +109,6 @@ const dayKey = computed(() => {
 const getSpecialHourClass = (minutes) => {
   const daySpacialHours = options.specialHours[dayKey.value] 
   if (!daySpacialHours) return false;
-  console.log(daySpacialHours, minutes, daySpacialHours.find(range => range.from >= minutes && range.to <= minutes))
   return daySpacialHours.find(range =>  minutes >= range.from  &&  minutes <= range.to )?.class;
 }
 

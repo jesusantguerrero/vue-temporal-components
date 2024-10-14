@@ -85,10 +85,10 @@ interface Props {
   task: ITaskPartial;
   timer: any;
   size?: 'mini'|'normal',
-  disabled: Boolean;
+  disabled?: Boolean;
   template?: string[];
   modes?: ITimerModes;
-  moveOnStop: boolean
+  moveOnStop?: boolean
 }
 const props = withDefaults(defineProps<Props>(),{
   size: 'normal',

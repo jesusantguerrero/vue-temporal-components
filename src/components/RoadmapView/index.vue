@@ -174,12 +174,12 @@ const { year, viewType, canZoomIn, canZoomOut, componentName } = toRefs(state);
 <style lang="scss">
 .gantt-scroller {
   &::-webkit-scrollbar-thumb {
-    background-color: transparentize($color: #000000, $amount: 0.7);
+    background-color: color.scale($color: #000000, $amount: 0.7);
     border-radius: 4px;
     cursor: pointer;
 
     &:hover {
-      background-color: transparentize($color: #000000, $amount: 0.7);
+      background-color: color.scale($color: #000000, $amount: 0.7);
     }
   }
 
