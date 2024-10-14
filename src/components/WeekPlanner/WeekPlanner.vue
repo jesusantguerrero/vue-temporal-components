@@ -203,14 +203,15 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
+@use 'sass:color';
 
 .weekline {
   &::-webkit-scrollbar-thumb {
-    background-color: color.scale($color: #000000, $amount: 0.7);
+    background-color: color.scale($color: #000000, $alpha: 70%);
     border-radius: 4px;
 
     &:hover {
-      background-color: color.scale($color: #000000, $amount: 0.7);
+      background-color: color.scale($color: #000000, $alpha: 70%);
     }
   }
 

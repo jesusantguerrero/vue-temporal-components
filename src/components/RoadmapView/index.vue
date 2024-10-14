@@ -172,14 +172,16 @@ const { year, viewType, canZoomIn, canZoomOut, componentName } = toRefs(state);
 </script>
 
 <style lang="scss">
+@use 'sass:color';
+
 .gantt-scroller {
   &::-webkit-scrollbar-thumb {
-    background-color: color.scale($color: #000000, $amount: 0.7);
+    background-color: color.scale($color: #000000, $alpha: 70%);
     border-radius: 4px;
     cursor: pointer;
 
     &:hover {
-      background-color: color.scale($color: #000000, $amount: 0.7);
+      background-color: color.scale($color: #000000, $alpha: 70%);
     }
   }
 
